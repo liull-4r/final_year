@@ -1,0 +1,43 @@
+.container {
+  max-width: 800px;
+  margin: auto;
+}
+
+.doctors-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.doctor-card {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-image {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.appointment-button {
+  display: block;
+  text-align: center;
+  background-color: #007bff;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+.appointment-button:hover {
+  background-color: #0056b3;
+}
+.doctor-image {
+  max-width: 300px; /* Adjust the maximum width as needed */
+  max-height: 300px; /* Adjust the maximum height as needed */
+  object-fit: contain;
+}
