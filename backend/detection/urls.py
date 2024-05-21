@@ -7,6 +7,13 @@ router = routers.DefaultRouter()
 # Register your ViewSet with the s
 router.register('customers', views.CustomerViewSet)
 router.register('appointments', views.AppointmentViewSet)
+
+router.register('doctorspecialistrequest', views.DoctorSpecialistRequestViewSet)
+router.register('specialistdoctorresponse', views.SpecialistDoctorResponseViewSet)
+router.register('doctorspecialistdata', views.DoctorSpecialistDataViewSet)
+router.register('specialistrecommendation', views.SpecialistDoctorRecommendationViewSet)
+router.register('doctorspecialistnotifications', views.DoctorSpecialistNotificationViewSet,basename='doctor-specialist-notification')
+router.register('specialistdoctornotifications', views.SpecialistDoctorNotificationViewSet,basename='specialist-doctor-notification')
 router.register('radiologistdoctor', views.RadiologistDoctorViewSet)
 router.register('radiologistdoctornotifications', views.RadiologistDoctorNotificationViewSet)
 router.register('doctorradiologist', views.DoctorRadiologistViewSet)

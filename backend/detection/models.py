@@ -50,7 +50,7 @@ class MriScanImage(models.Model):
 
 class Appointment(models.Model):
     patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='patient_appointments')
-    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_appointments')
+    specialist = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='specialist_patient_appointments')
     appointment_datetime = models.DateTimeField()
     reason = models.CharField(max_length=255, blank=True)
     notes = models.TextField(blank=True)
@@ -66,6 +66,32 @@ class DoctorRadiologist(models.Model):
     notes = models.TextField(blank=True)
     def __str__(self):
         return f"Message for {self.patient.username} with {self.radiologist.username}"
+
+class DoctorSpecialistData(models.Model):
+    patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='patient_specialist_appointments')
+    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_specialist_appointments')
+    specialist= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='specialist_appointments')
+    reason = models.CharField(max_length=255, blank=True)
+    def __str__(self):
+        return f"Message for {self.patient.username} with {self.specialist.username}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class RadiologistDoctor(models.Model):
     patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='patient_doctor_appointments')
     doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_doctor_appointments')
@@ -94,6 +120,54 @@ class RadiologistDoctorNotification(models.Model):
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
+
+class DoctorSpecialistRequest(models.Model):
+    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_requests')
+    specialist = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='specialist_requests')
+    message = models.TextField()
+
+class SpecialistDoctorResponse(models.Model):
+    specialist = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='specialist_responses')
+    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_responses')
+    message = models.TextField()
+class SpecialistDoctorRecommendation(models.Model):
+    specialist = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='specialist_recommendations')
+    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_recommendations')
+    patient= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='patient_recommendations')
+    recommendation = models.TextField()
+
+
+
+
+class DoctorSpecialistNotification(models.Model):
+    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    doctor_id = models.IntegerField()
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)
+class SpecialistDoctorNotification(models.Model):
+    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    specialist_id = models.IntegerField()
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Availability(models.Model):
     DAYS_OF_WEEK = [
         ('MONDAY', 'Monday'),
