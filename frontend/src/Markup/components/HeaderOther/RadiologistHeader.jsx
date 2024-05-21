@@ -100,9 +100,9 @@ function RadiologistHeader() {
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/radioscan"
+                to="/scan"
               >
-                Radio Scan
+                Scan
               </Link>
             </li>
 

@@ -1,12 +1,11 @@
-// import logoblack from "../../../assets/img/Custom/logoblack.png";
+import logoblack from "../../../assets/img/Custom/logoblack.png";
 import { IoCloseSharp } from "react-icons/io5";
 import { IoIosMenu } from "react-icons/io";
 import loginService from "../../../Services/login.service";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
-// import { useNavigate } from "react-router-dom";
-function DoctorHeader() {
+function SpecialistHeader() {
   // const navigate = useNavigate();
   const logOut = () => {
     loginService.Logout();
@@ -40,9 +39,9 @@ function DoctorHeader() {
     <header id="header" className="fixed-top d-flex align-items-center">
       <div className="container d-flex align-items-center">
         <div className="logo me-auto mt-1 d-flex align-items-center">
-          {/* <Link onClick={scrollToTop} to="/">
+          <Link onClick={scrollToTop} to="/">
             <img src={logoblack} alt="logo" loading="lazy" />
-          </Link> */}
+          </Link>
           <Link
             onClick={scrollToTop}
             className="logotext"
@@ -61,7 +60,7 @@ function DoctorHeader() {
           <ul className="header">
             <IoCloseSharp onClick={handleShow} className="mobile-nav-toggle" />
 
-            {/* <li className="link">
+            <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -69,8 +68,8 @@ function DoctorHeader() {
               >
                 About Us
               </Link>
-            </li> */}
-            {/* <li className="link">
+            </li>
+            <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -78,68 +77,23 @@ function DoctorHeader() {
               >
                 Service
               </Link>
-            </li> */}
+            </li>
             <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/availability"
+                to="/specialistdoctorresponse"
               >
-                Availability
+                Response to Doctor
               </Link>
             </li>
             <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/specialistdoctornotification"
+                to="/doctorspecialistnotification"
               >
-                Specialist Notifications
-              </Link>
-            </li>
-            <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/radiologistdoctornotification"
-              >
-                Radiologist Notifications
-              </Link>
-            </li>
-            <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/doctorspecialistrequest"
-              >
-                Request
-              </Link>
-            </li>
-            <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/record"
-              >
-                Add Record
-              </Link>
-            </li>
-            <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/doctorspecialistdata"
-              >
-                Post to Specialist
-              </Link>
-            </li>
-            <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/doctorradiologistpost"
-              >
-                Post to Radiologist
+                Notifications
               </Link>
             </li>
             <li className="link">
@@ -152,13 +106,22 @@ function DoctorHeader() {
               </Link>
             </li>
 
-            {/* <li className="link">
+            <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
                 to="/resources"
               >
                 Resources
+              </Link>
+            </li>
+            <li className="link">
+              <Link
+                onClick={handleLinkClick}
+                className="nav-link scrollto"
+                to="/appointment"
+              >
+                Make Appointement
               </Link>
             </li>
 
@@ -170,7 +133,7 @@ function DoctorHeader() {
               >
                 Contact
               </Link>
-            </li> */}
+            </li>
             {isLogged ? (
               <li>
                 <Link
@@ -224,4 +187,4 @@ function DoctorHeader() {
   );
 }
 
-export default DoctorHeader;
+export default SpecialistHeader;

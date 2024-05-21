@@ -1,23 +1,23 @@
 import { useState } from "react";
 import axios from "axios";
 import "./AppointmentForm.css"; // Import custom styles
-import { useLocation } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+// import { useLocation } from "react-router-dom";
+// import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
-
 function AppointmentForm() {
   const [, setLoading] = useState(false); // New loading state
-  const Token = localStorage.getItem("Token");
-  const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
-  const location = useLocation();
-  const { doctorIdK } = location.state;
+  // const Token = localStorage.getItem("Token");
+  // const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
+  // const location = useLocation();
+  // const { doctorIdK } = location.state;
   const [formData, setFormData] = useState({
     appointment_datetime: null,
     reason: "",
     notes: "",
   });
-  const patientId = user?.user_id; // Fixed patient ID if user is not null
-  const doctorId = doctorIdK; // Fixed doctor ID
+  // const patientId = user?.user_id; // Fixed patient ID if user is not null
+  const patientId = 2; // Fixed patient ID
+  const specialistId = 5; // Fixed doctor ID
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -45,7 +45,7 @@ function AppointmentForm() {
       }
       // Set fixed patient and doctor IDs
       formData.patient_id = patientId;
-      formData.doctor_id = doctorId;
+      formData.specialist_id = specialistId;
       // Assuming you have an API endpoint for creating appointments
       const response = await axios.post(
         "http://localhost:9000/detection/appointments/",

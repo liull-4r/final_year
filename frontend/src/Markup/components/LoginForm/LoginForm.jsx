@@ -9,22 +9,6 @@ import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
 
 const LoginForm = () => {
-  // const fetchUserData = async (token) => {
-  //   try {
-  //     const response = await fetch("http://localhost:8000/detection/info/me/", {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `JWT ${token}`,
-  //       },
-  //     });
-  //     // const userData = await response.json();
-  //     return response;
-  //   } catch (error) {
-  //     console.log(error);
-  //     console.log("Error fetching user data:", error);
-  //     throw error;
-  //   }
-  // };
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -107,7 +91,11 @@ const LoginForm = () => {
         toast.dismiss(toastId);
       } else if (user_role === "Radiologist") {
         toast.success("Login successful");
-        window.location.replace("/radioscan");
+        window.location.replace("/scan");
+        toast.dismiss(toastId);
+      } else if (user_role === "Specialist") {
+        toast.success("Login successful");
+        window.location.replace("/scan");
         toast.dismiss(toastId);
       }
     } catch (error) {
