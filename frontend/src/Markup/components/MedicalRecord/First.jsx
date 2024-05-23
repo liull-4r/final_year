@@ -77,7 +77,7 @@ function OrderListForm() {
                     style={{ padding: "15px" }}
                     type="text"
                     name="search_name"
-                    placeholder="Search for a customer using User name"
+                    placeholder="Search for a Patient using User name"
                     value={searchQuery}
                     onChange={handleSearchInputChange}
                   />

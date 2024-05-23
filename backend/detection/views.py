@@ -301,8 +301,14 @@ class DoctorSpecialistNotificationViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         specialist_id = self.request.query_params.get('specialist_id')
-        if specialist_id:
+        read_status = self.request.query_params.get('read')
+        if specialist_id and read_status:
+            queryset = queryset.filter(recipient_id=specialist_id, read=read_status)
+        elif specialist_id:
             queryset = queryset.filter(recipient_id=specialist_id)
+        elif read_status:
+            queryset = queryset.filter(read=read_status)
+        
         return queryset
 class SpecialistDoctorNotificationViewSet(ModelViewSet):
     queryset = SpecialistDoctorNotification.objects.all()

@@ -298,11 +298,8 @@ class DoctorSpecialistDataSerializer(serializers.ModelSerializer):
     patient_cholesterol_level=serializers.SerializerMethodField()
     doctor_notes=serializers.SerializerMethodField()
     patient_model_prediction=serializers.SerializerMethodField()
-    # patient_mir_scan_image=serializers.SerializerMethodField()
-    # patient_mir_scan_image = serializers.ImageField(source='image', read_only=True)
+    
     patient_radiologist_note=serializers.SerializerMethodField()
-    # patient_mir_scan_image = serializers.ImageField(source='get_image_url', read_only=True)
-
 
     patient_id=serializers.IntegerField()
     doctor_id=serializers.IntegerField()
@@ -371,14 +368,14 @@ class DoctorRadiologistNotificationSerializer(serializers.ModelSerializer):
     message = serializers.CharField( read_only=True)
     class Meta:
         model = DoctorRadiologistNotification
-        fields = ['id', 'recipient_id', 'doctor_id', 'message', 'created_at']
+        fields = ['id', 'recipient_id', 'doctor_id', 'message','read', 'created_at']
 class SpecialistDoctorNotificationSerializer(serializers.ModelSerializer):
     recipient_id = serializers.IntegerField()
     specialist_id = serializers.IntegerField()
     message = serializers.CharField( read_only=True)
     class Meta:
         model = SpecialistDoctorNotification
-        fields = ['id', 'recipient_id', 'specialist_id', 'message', 'created_at']
+        fields = ['id', 'recipient_id', 'specialist_id', 'message','read', 'created_at']
 
 
 class DoctorSpecialistNotificationSerializer(serializers.ModelSerializer):
@@ -387,7 +384,7 @@ class DoctorSpecialistNotificationSerializer(serializers.ModelSerializer):
     message = serializers.CharField( read_only=True)
     class Meta:
         model = DoctorSpecialistNotification
-        fields = ['id', 'recipient_id', 'doctor_id', 'message', 'created_at']
+        fields = ['id', 'recipient_id', 'doctor_id', 'message', 'created_at','read']
 
 class RadiologistDoctorNotificationSerializer(serializers.ModelSerializer):
     recipient_id = serializers.IntegerField()
@@ -395,9 +392,7 @@ class RadiologistDoctorNotificationSerializer(serializers.ModelSerializer):
     message = serializers.CharField( read_only=True)
     class Meta:
         model = RadiologistDoctorNotification
-        fields = ['id', 'recipient_id', 'radiologist_id', 'message', 'created_at']
-
-
+        fields = ['id', 'recipient_id', 'radiologist_id', 'message', 'read', 'created_at']
 class AvailabilitySerializer(serializers.ModelSerializer):
     start_time_formatted = serializers.SerializerMethodField()
     end_time_formatted = serializers.SerializerMethodField()

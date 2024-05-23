@@ -71,7 +71,7 @@ class DoctorSpecialistData(models.Model):
     patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='patient_specialist_appointments')
     doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_specialist_appointments')
     specialist= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='specialist_appointments')
-    reason = models.CharField(max_length=255, blank=True)
+    message = models.CharField(max_length=255, blank=True)
     def __str__(self):
         return f"Message for {self.patient.username} with {self.specialist.username}"
 
@@ -99,7 +99,6 @@ class RadiologistDoctor(models.Model):
     prediction = models.TextField()
     image = models.ImageField(upload_to='scanstodoctor/', validators=[validate_file_size])
     recommendation = models.TextField(blank=False)
-
     def __str__(self):
         return f"Message for {self.patient.username} with {self.radiologist.username}"
         
@@ -136,10 +135,6 @@ class SpecialistDoctorRecommendation(models.Model):
     doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_recommendations')
     patient= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='patient_recommendations')
     recommendation = models.TextField()
-
-
-
-
 class DoctorSpecialistNotification(models.Model):
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     doctor_id = models.IntegerField()

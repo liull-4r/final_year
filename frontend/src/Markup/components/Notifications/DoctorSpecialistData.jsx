@@ -13,7 +13,7 @@ const DoctorSpecialistData = () => {
 
   const [patients, setPatients] = useState([]);
   const [formData, setFormData] = useState({
-    reason: "",
+    message: "",
     patient_id: null,
     doctor_id: doctorId,
     specialist_id: specialistIdK,
@@ -66,14 +66,14 @@ const DoctorSpecialistData = () => {
       <h2 style={styles.heading}>Doctor Specialist Data</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.inputGroup}>
-          <label htmlFor="reason" style={styles.label}>
+          <label htmlFor="message" style={styles.label}>
             Message:
           </label>
           <input
             type="text"
-            id="reason"
-            name="reason"
-            value={formData.reason}
+            id="message"
+            name="message"
+            value={formData.message}
             onChange={handleChange}
             style={styles.input}
           />

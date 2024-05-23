@@ -32,6 +32,27 @@ const RadiologistDoctorNotification = () => {
     return match ? match[1] : "";
   };
 
+  const markAsRead = async (notificationId) => {
+    try {
+      await axios.patch(
+        `http://localhost:9000/detection/radiologistdoctornotifications/${notificationId}/`,
+        {
+          read: true,
+        }
+      );
+      // Update the state to reflect the change
+      setNotifications(
+        notifications.map((notification) =>
+          notification.id === notificationId
+            ? { ...notification, read: true }
+            : notification
+        )
+      );
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+    }
+  };
+
   return (
     <div style={styles.container}>
       <h2 style={styles.heading}>Notifications {notifications.length}</h2>
@@ -55,6 +76,11 @@ const RadiologistDoctorNotification = () => {
                 </Link>
               ) : (
                 <p>{notification.message}</p>
+              )}
+              {!notification.read && (
+                <button onClick={() => markAsRead(notification.id)}>
+                  Mark as Read
+                </button>
               )}
             </div>
           ))}

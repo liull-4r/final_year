@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-// import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const DoctorRadiologistNotification = () => {
-  //   const Token = localStorage.getItem("Token");
-  //   const user = Token ? jwtDecode(Token) : null;
+  const Token = localStorage.getItem("Token");
+  const user = Token ? jwtDecode(Token) : null;
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/detection/doctorradiologistnotifications/?radiologist_id=4`
+          `http://localhost:9000/detection/doctorradiologistnotifications/?radiologist_id=${user?.user_id}`
         );
         setNotifications(response.data);
       } catch (error) {
@@ -33,6 +33,26 @@ const DoctorRadiologistNotification = () => {
     return match ? match[1] : "";
   };
 
+  const markAsRead = async (notificationId) => {
+    try {
+      await axios.patch(
+        `http://localhost:9000/detection/doctorradiologistnotifications/${notificationId}/`,
+        {
+          read: true,
+        }
+      );
+      // Update the state to reflect the change
+      setNotifications(
+        notifications.map((notification) =>
+          notification.id === notificationId
+            ? { ...notification, read: true }
+            : notification
+        )
+      );
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+    }
+  };
   return (
     <div style={styles.container}>
       <h2 style={styles.heading}>Notifications {notifications.length}</h2>
@@ -56,6 +76,11 @@ const DoctorRadiologistNotification = () => {
                 </Link>
               ) : (
                 <p>{notification.message}</p>
+              )}
+              {!notification.read && (
+                <button onClick={() => markAsRead(notification.id)}>
+                  Mark as Read
+                </button>
               )}
             </div>
           ))}
