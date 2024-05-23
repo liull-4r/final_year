@@ -108,6 +108,15 @@ class RadiologistDoctorViewSet(ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
+class GetPatientBasedOnRadiologistViewSet(ModelViewSet):
+    serializer_class = DoctorRadiologistSerializer
+    def get_queryset(self):
+        radiologist_id = self.request.query_params.get('radiologist_id')
+        if radiologist_id:
+            return DoctorRadiologist.objects.filter(radiologist_id=radiologist_id)
+        return DoctorRadiologist.objects.none()
+
+
 
 
 class AppointmentViewSet(ModelViewSet):
@@ -221,6 +230,43 @@ class DoctorSpecialistDataViewSet(ModelViewSet):
         if patient_id:
             return DoctorSpecialistData.objects.filter(patient_id=patient_id)
         return DoctorSpecialistData.objects.all()
+
+
+
+
+
+
+
+class GetPatientBasedOnDoctorSpecialistDataViewSet(ModelViewSet):
+    serializer_class = DoctorSpecialistDataSerializer
+    def get_queryset(self):
+        specialist_id = self.request.query_params.get('specialist_id')
+        if specialist_id:
+            return DoctorSpecialistData.objects.filter(specialist_id=specialist_id)
+        return DoctorSpecialistData.objects.none()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class NotificationViewSet(ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
@@ -277,6 +323,21 @@ class CustomerViewSet(CreateModelMixin,RetrieveModelMixin,UpdateModelMixin,Gener
     def doctors(self, request):
         doctors = Customer.objects.filter(role='doctor')
         serializer = CustomerSerializer(doctors, many=True)
+        return Response(serializer.data)
+    @action(detail=False, methods=['GET'])
+    def specialists(self, request):
+        specialists = Customer.objects.filter(role='specialist')
+        serializer = CustomerSerializer(specialists, many=True)
+        return Response(serializer.data)
+    @action(detail=False, methods=['GET'])
+    def patients(self, request):
+        patients = Customer.objects.filter(role='patient')
+        serializer = CustomerSerializer(patients, many=True)
+        return Response(serializer.data)
+    @action(detail=False, methods=['GET'])
+    def radiologists(self, request):
+        radiologists = Customer.objects.filter(role='radiologist')
+        serializer = CustomerSerializer(radiologists, many=True)
         return Response(serializer.data)
     @action(detail=False,methods=['GET','PUT'])
     def me(self,request):
@@ -344,12 +405,6 @@ class PatientInfoViewSet(ModelViewSet):
 
 
 
-
-
-
-
-
-
 class MedicalRecordViewSet(ModelViewSet):
     serializer_class = MedicalRecordSerializer
     def get_queryset(self):
@@ -357,26 +412,37 @@ class MedicalRecordViewSet(ModelViewSet):
         if patient_id:
             return MedicalRecord.objects.filter(patient__id=patient_id)
         return MedicalRecord.objects.none()  # Return no records if no patient_id is provided
-
+  
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
     def put(self, request, *args, **kwargs):
         patient_id = request.query_params.get('patient_id')
         if not patient_id:
             return Response({"detail": "Patient ID not provided."}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
             medical_record = MedicalRecord.objects.get(patient__id=patient_id)
         except MedicalRecord.DoesNotExist:
             return Response({"detail": "Medical record not found."}, status=status.HTTP_404_NOT_FOUND)
-
         serializer = self.get_serializer(medical_record, data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
+
+
+class GetPatientBasedOnMedicalRecordViewSet(ModelViewSet):
+    serializer_class = MedicalRecordSerializer
+    def get_queryset(self):
+        doctor_id = self.request.query_params.get('doctor_id')
+        if doctor_id:
+            return MedicalRecord.objects.filter(doctor_id=doctor_id)
+        return MedicalRecord.objects.none()
+
+
+
+
+
 
 class DoctorSpecialistRequestViewSet(ModelViewSet):
     queryset = DoctorSpecialistRequest.objects.all()

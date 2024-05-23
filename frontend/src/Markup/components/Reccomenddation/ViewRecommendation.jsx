@@ -46,21 +46,20 @@ const ViewRecommendation = () => {
   return (
     <div style={{ textAlign: "center", marginTop: "100px" }}>
       <h1>Recommendations</h1>
-      <ul>
-        {recommendations.map((recommendation) => (
-          <li key={recommendation.id}>
-            <p>
-              <strong>Recommendation:</strong> {recommendation?.recommendation}
-            </p>
-            <p>
-              <strong>Doctor ID:</strong> {recommendation?.doctor}
-            </p>
-            <p>
-              <strong>User ID:</strong> {recommendation?.user}
-            </p>
-          </li>
-        ))}
-      </ul>
+
+      {recommendations.length === 0 ? (
+        <p>There are No recommendations found</p>
+      ) : (
+        <ul>
+          {recommendations.map((recommendation) => (
+            <li key={recommendation.id}>
+              <ul>
+                <ol>{recommendation?.recommendation}</ol>
+              </ul>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

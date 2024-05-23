@@ -13,7 +13,6 @@ import AppointmentForm from "./Markup/components/AppointmentForm/AppointmentForm
 import NotificationsList from "./Markup/components/Notifications/NotificationsList ";
 import AppointmentDetail from "./Markup/components/Notifications/AppointmentDetail";
 import DoctorsList from "./Markup/components/DoctorsList/DoctorsList";
-// import AppointmentList from "./Markup/components/AppointmentForm/AppointmentList";
 import DoctorHeader from "./Markup/components/HeaderOther/HeaderOther";
 import Contact from "./Markup/components/ContactF/Contact";
 const Header = lazy(() => import("./Markup/components/Header/Header"));
@@ -64,6 +63,12 @@ import DoctorRecommendationDetail from "./Markup/components/Notifications/Doctor
 import DoctorResponseDetail from "./Markup/components/Notifications/DoctorResponseDetail";
 import SpecialistHeader from "./Markup/components/HeaderOther/SpecialistHeader";
 import DoctorSpecialistData from "./Markup/components/Notifications/DoctorSpecialistData";
+import SpecialistList from "./Markup/components/DoctorsList/SpecialistList";
+import SpecialistDataList from "./Markup/components/DoctorsList/SpecialistDataList";
+import RadiologistList from "./Markup/components/DoctorsList/RadiologistList";
+import DoctorListRadiologist from "./Markup/components/DoctorsList/DoctorListRadiologist";
+import SpecialistDoctorsList from "./Markup/components/DoctorsList/SpecialistDoctorsList";
+import OrderListForm from "./Markup/components/MedicalRecord/First";
 
 function App() {
   const { userRole } = useUserRole();
@@ -145,8 +150,10 @@ function App() {
           path="/record"
           element={
             <>
-              {userRole === "Doctor" && <DoctorHeader />}
-              <MedicalRecordsForm />
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <MedicalRecordsForm />
+              </PrivateAuthRoute>
               <Footer />
             </>
           }
@@ -155,9 +162,10 @@ function App() {
           path="/updaterecord"
           element={
             <>
-              {/* {userRole == "Doctor" ? <DoctorHeader /> : <Header />} */}
-              <Header />
-              <MedicalRecordsFormUpdate />
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <MedicalRecordsFormUpdate />
+              </PrivateAuthRoute>
               <Footer />
             </>
           }
@@ -277,8 +285,11 @@ function App() {
           path="/doctorradiologistdetail/:id"
           element={
             <>
-              <DoctorHeader />
-              <DoctorRadiologistDetail />
+              <RadiologistHeader />
+              <PrivateAuthRoute roles={["Radiologist"]}>
+                <DoctorRadiologistDetail />
+              </PrivateAuthRoute>
+
               <Footer />
             </>
           }
@@ -287,7 +298,7 @@ function App() {
           path="/radiologistdoctordetail/:id"
           element={
             <>
-              <RadiologistHeader />
+              <DoctorHeader />
               <RadiologistDoctorDetail />
               <Footer />
             </>
@@ -634,6 +645,78 @@ function App() {
               <DoctorHeader />
               <PrivateAuthRoute roles={["Doctor"]}>
                 <DoctorResponseDetail />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/specialists"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <SpecialistList />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/radiologistlists"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <RadiologistList />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/posttospecialistdata"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <SpecialistDataList />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/postradiotodoctor"
+          element={
+            <>
+              <RadiologistHeader />
+              <PrivateAuthRoute roles={["Radiologist"]}>
+                <DoctorListRadiologist />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/responsetodoctor"
+          element={
+            <>
+              <SpecialistHeader />
+              <PrivateAuthRoute roles={["Specialist"]}>
+                <SpecialistDoctorsList />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/search"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <OrderListForm />
               </PrivateAuthRoute>
               <Footer />
             </>

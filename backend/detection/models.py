@@ -98,7 +98,8 @@ class RadiologistDoctor(models.Model):
     radiologist= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='radiologist_doctor_appointments')
     prediction = models.TextField()
     image = models.ImageField(upload_to='scanstodoctor/', validators=[validate_file_size])
-    reccommendation = models.TextField(blank=True)
+    recommendation = models.TextField(blank=False)
+
     def __str__(self):
         return f"Message for {self.patient.username} with {self.radiologist.username}"
         
@@ -199,7 +200,6 @@ class MedicalRecord(models.Model):
     blood_sugar_level = models.FloatField()  # Blood sugar level in mg/dL
     heart_rate = models.IntegerField()  # Heart rate in bpm
     cholesterol_level = models.FloatField()  # Cholesterol level in mg/dL
-    doctor_notes = models.TextField(blank=True, null=True)  # Additional notes by the doctor
-
+    doctor_notes = models.TextField(blank=True, null=True)
     def __str__(self):
         return f"{self.patient_name}"

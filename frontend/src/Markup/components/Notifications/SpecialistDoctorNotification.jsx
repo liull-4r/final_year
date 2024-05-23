@@ -37,31 +37,35 @@ const SpecialistDoctorNotification = () => {
   return (
     <div style={styles.container}>
       <h2 style={styles.heading}>Notifications {notifications.length}</h2>
-      <div style={styles.notificationContainer}>
-        {notifications.map((notification) => (
-          <div key={notification.id} style={styles.notification}>
-            {notification.message.startsWith("New Response") ? (
-              <Link
-                to={`/specialistdoctorresponsedetail/${extractAppointmentId(
-                  notification.message
-                )}`}
-              >
+      {notifications.length == 0 ? (
+        <p>No Notifications Availabe</p>
+      ) : (
+        <div style={styles.notificationContainer}>
+          {notifications.map((notification) => (
+            <div key={notification.id} style={styles.notification}>
+              {notification.message.startsWith("New Response") ? (
+                <Link
+                  to={`/specialistdoctorresponsedetail/${extractAppointmentId(
+                    notification.message
+                  )}`}
+                >
+                  <p>{notification.message}</p>
+                </Link>
+              ) : notification.message.startsWith("New Recommendation") ? (
+                <Link
+                  to={`/specialistdoctorrecommendationdetail/${extractMRIScanId(
+                    notification.message
+                  )}`}
+                >
+                  <p>{notification.message}</p>
+                </Link>
+              ) : (
                 <p>{notification.message}</p>
-              </Link>
-            ) : notification.message.startsWith("New Recommendation") ? (
-              <Link
-                to={`/specialistdoctorrecommendationdetail/${extractMRIScanId(
-                  notification.message
-                )}`}
-              >
-                <p>{notification.message}</p>
-              </Link>
-            ) : (
-              <p>{notification.message}</p>
-            )}
-          </div>
-        ))}
-      </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

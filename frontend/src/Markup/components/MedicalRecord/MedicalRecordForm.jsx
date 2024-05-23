@@ -3,8 +3,15 @@ import { useState } from "react";
 import axios from "axios";
 import "./MedicalRecordsForm.css"; // Custom CSS
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
+import { useLocation } from "react-router-dom";
 
 const MedicalRecordsForm = () => {
+  const location = useLocation();
+  const { customerIDK } = location.state;
+  const Token = localStorage.getItem("Token");
+  const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
+  const doctorId = user?.user_id;
   const [formData, setFormData] = useState({
     weight: "",
     systolic_blood_pressure: "",
@@ -21,10 +28,10 @@ const MedicalRecordsForm = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  formData.doctor = doctorId;
+  formData.patient = customerIDK;
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const toastId = toast.loading("posting medical record ...");
     try {
       const response = await axios.post(
@@ -122,17 +129,7 @@ const MedicalRecordsForm = () => {
           onChange={handleChange}
         ></textarea>
       </div>
-      <div className="row mb-3">
-        <div className="col-md-6">
-          <label>Doctor:</label>
-          <input
-            type="text"
-            className="form-control"
-            name="doctor"
-            value={formData.doctor}
-            onChange={handleChange}
-          />
-        </div>
+      {/* <div className="row mb-3">
         <div className="col-md-6">
           <label>Patient:</label>
           <input
@@ -143,7 +140,7 @@ const MedicalRecordsForm = () => {
             onChange={handleChange}
           />
         </div>
-      </div>
+      </div> */}
       <button type="submit" className="btn btn-primary custom-submit">
         Submit
       </button>

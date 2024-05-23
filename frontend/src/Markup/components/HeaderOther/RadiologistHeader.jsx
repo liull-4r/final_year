@@ -82,7 +82,7 @@ function RadiologistHeader() {
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/radiologistdoctorpost"
+                to="/postradiotodoctor"
               >
                 Post Doctor
               </Link>

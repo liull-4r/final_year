@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 // import { jwtDecode } from "jwt-decode";
-
+import { jwtDecode } from "jwt-decode";
 const DoctorSpecialistNotification = () => {
-  //   const Token = localStorage.getItem("Token");
-  //   const user = Token ? jwtDecode(Token) : null;
+  const Token = localStorage.getItem("Token");
+  const user = Token ? jwtDecode(Token) : null;
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/detection/doctorspecialistnotifications/?specialist_id=4`
+          `http://localhost:9000/detection/doctorspecialistnotifications/?specialist_id=${user?.user_id}`
         );
         setNotifications(response.data);
       } catch (error) {
@@ -28,36 +28,36 @@ const DoctorSpecialistNotification = () => {
     return match ? match[1] : "";
   };
 
-  const extractMRIScanId = (message) => {
-    const match = message.match(/\(ID: (\d+)\)/);
-    return match ? match[1] : "";
-  };
   console.log(notifications);
 
   return (
     <div style={styles.container}>
       <h2 style={styles.heading}>Notifications {notifications.length}</h2>
-      <div style={styles.notificationContainer}>
-        {notifications.map((notification) => (
-          <div key={notification.id} style={styles.notification}>
-            {notification.message.startsWith("New Message") ? (
-              <Link
-                to={`/doctorspecialistdetail/${extractAppointmentId(
-                  notification.message
-                )}`}
-              >
+      {notifications.length === 0 ? (
+        <p>No notifications Available</p>
+      ) : (
+        <div style={styles.notificationContainer}>
+          {notifications.map((notification) => (
+            <div key={notification.id} style={styles.notification}>
+              {notification.message.startsWith("New Message") ? (
+                <Link
+                  to={`/doctorspecialistdetail/${extractAppointmentId(
+                    notification.message
+                  )}`}
+                >
+                  <p>{notification.message}</p>
+                </Link>
+              ) : notification.message.startsWith("New Request") ? (
+                <Link to={`/doctorspecialistnotification`}>
+                  <p>{notification.message}</p>
+                </Link>
+              ) : (
                 <p>{notification.message}</p>
-              </Link>
-            ) : notification.message.startsWith("New Request") ? (
-              <Link to={`/scansrt/${extractMRIScanId(notification.message)}`}>
-                <p>{notification.message}</p>
-              </Link>
-            ) : (
-              <p>{notification.message}</p>
-            )}
-          </div>
-        ))}
-      </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

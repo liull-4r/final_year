@@ -1,16 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
-import "./RadiologistDoctorForm.css";
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
+import "./RadiologistDoctorForm.css";
 
 const RadiologistDoctorForm = () => {
+  const location = useLocation();
+  const { doctorIdK } = location.state;
+  const Token = localStorage.getItem("Token");
+  const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
+  const radiologistId = user?.user_id;
+  const [patients, setPatients] = useState([]);
   const [formData, setFormData] = useState({
-    doctor: "",
+    doctor: doctorIdK,
     patient: "",
-    radiologist: "",
+    radiologist: radiologistId,
+    recommendation: "",
     prediction: "",
     image: null,
   });
+
+  // Fetch patient data from the API
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/detection/getpatientsfromradiologist/?radiologist_id=${radiologistId}`
+        );
+        setPatients(response.data);
+      } catch (error) {
+        console.error("Error fetching patients:", error);
+        toast.error("Failed to fetch patients.");
+      }
+    };
+
+    fetchPatients();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,7 +61,10 @@ const RadiologistDoctorForm = () => {
     data.append("patient", formData.patient);
     data.append("radiologist", formData.radiologist);
     data.append("prediction", formData.prediction);
+    data.append("recommendation", formData.recommendation);
     data.append("image", formData.image);
+
+    console.log(data);
 
     try {
       const response = await axios.post(
@@ -61,35 +90,23 @@ const RadiologistDoctorForm = () => {
     <div style={{ marginTop: "100px" }} className="form-container">
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="doctor">Doctor:</label>
-          <input
-            type="text"
-            id="doctor"
-            name="doctor"
-            value={formData.doctor}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
           <label htmlFor="patient">Patient:</label>
-          <input
-            type="text"
+          <select
             id="patient"
             name="patient"
             value={formData.patient}
             onChange={handleChange}
-          />
+            required
+          >
+            <option value="">Select a patient</option>
+            {patients.map((patient) => (
+              <option key={patient.patient_id} value={patient.patient_id}>
+                {patient.patient_first_name} {patient.patient_last_name}
+              </option>
+            ))}
+          </select>
         </div>
-        <div className="form-group">
-          <label htmlFor="radiologist">Radiologist:</label>
-          <input
-            type="text"
-            id="radiologist"
-            name="radiologist"
-            value={formData.radiologist}
-            onChange={handleChange}
-          />
-        </div>
+
         <div className="form-group">
           <label htmlFor="prediction">Prediction:</label>
           <textarea
@@ -101,7 +118,17 @@ const RadiologistDoctorForm = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="image">Image:</label>
+          <label htmlFor="reccommendation">Recommendation:</label>
+          <textarea
+            id="recommendation"
+            name="recommendation"
+            value={formData.recommendation}
+            onChange={handleChange}
+            rows="4"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="image">Mri Scan Image:</label>
           <input
             type="file"
             id="image"

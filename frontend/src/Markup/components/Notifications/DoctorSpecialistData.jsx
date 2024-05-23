@@ -1,14 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 const DoctorSpecialistData = () => {
+  const location = useLocation();
+  const { specialistIdK } = location.state;
+  const Token = localStorage.getItem("Token");
+  const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
+  const doctorId = user?.user_id;
+
+  const [patients, setPatients] = useState([]);
   const [formData, setFormData] = useState({
     reason: "",
     patient_id: null,
-    doctor_id: null,
-    specialist_id: null,
+    doctor_id: doctorId,
+    specialist_id: specialistIdK,
   });
+
+  // Fetch patient data from the API
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/detection/getpatientsfrommedicalrecord/?doctor_id=${doctorId}`
+        );
+        setPatients(response.data);
+      } catch (error) {
+        console.error("Error fetching patients:", error);
+        toast.error("Failed to fetch patients.");
+      }
+    };
+
+    fetchPatients();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,7 +50,7 @@ const DoctorSpecialistData = () => {
         formData
       );
       console.log("Response:", response.data);
-      toast.success("Posted data  successfully");
+      toast.success("Posted data successfully");
       toast.dismiss(toastId);
 
       // Do something with the response if needed
@@ -41,7 +67,7 @@ const DoctorSpecialistData = () => {
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.inputGroup}>
           <label htmlFor="reason" style={styles.label}>
-            Reason:
+            Message:
           </label>
           <input
             type="text"
@@ -54,42 +80,22 @@ const DoctorSpecialistData = () => {
         </div>
         <div style={styles.inputGroup}>
           <label htmlFor="patient_id" style={styles.label}>
-            Patient ID:
+            Patient:
           </label>
-          <input
-            type="number"
+          <select
             id="patient_id"
             name="patient_id"
             value={formData.patient_id}
             onChange={handleChange}
             style={styles.input}
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="doctor_id" style={styles.label}>
-            Doctor ID:
-          </label>
-          <input
-            type="number"
-            id="doctor_id"
-            name="doctor_id"
-            value={formData.doctor_id}
-            onChange={handleChange}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="specialist_id" style={styles.label}>
-            Specialist ID:
-          </label>
-          <input
-            type="number"
-            id="specialist_id"
-            name="specialist_id"
-            value={formData.specialist_id}
-            onChange={handleChange}
-            style={styles.input}
-          />
+          >
+            <option value="">Select a patient</option>
+            {patients.map((patient) => (
+              <option key={patient.patient} value={patient.patient}>
+                {patient.patient_first_name} {patient.patient_last_name}
+              </option>
+            ))}
+          </select>
         </div>
         <button type="submit" style={styles.button}>
           Submit

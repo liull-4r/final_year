@@ -6,9 +6,10 @@ from core.models import User
 class CustomerSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name', read_only=True)
     last_name = serializers.CharField(source='user.last_name', read_only=True)
+    username=serializers.CharField(source='user.username',read_only=True)
     class Meta:
         model = Customer
-        fields = ['id', 'user_id', 'first_name', 'last_name', 'phone', 'city', 'gender', 'bio', 'image','role']
+        fields = ['id', 'user_id', 'first_name', 'last_name','username', 'phone', 'city', 'gender', 'bio', 'image','role']
 class RecomendationSerializer(serializers.ModelSerializer):
     class Meta:
         model=Recomendation
@@ -30,9 +31,23 @@ class SpecialistDoctorResponseSerializer(serializers.ModelSerializer):
 
 
 class MedicalRecordSerializer(serializers.ModelSerializer):
+    patient_first_name = serializers.SerializerMethodField()
+    patient_last_name = serializers.SerializerMethodField()
     class Meta:
         model=MedicalRecord
-        fields='__all__'
+        fields=['id','doctor','patient','patient_first_name','patient_last_name','weight','systolic_blood_pressure','diastolic_blood_pressure','blood_sugar_level','heart_rate','cholesterol_level','doctor_notes']
+    def get_patient_first_name(self, obj):
+        # Access the patient object from the appointment instance and get the first name
+        patient = obj.patient
+        if patient:
+            return patient.first_name
+        return None
+    def get_patient_last_name(self, obj):
+        patient = obj.patient
+        if patient:
+            return patient.last_name
+        return None
+    
 class CustomCustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
@@ -58,7 +73,6 @@ class MriScanImageSerializer(serializers.ModelSerializer):
             return patient.first_name
         return None
     def get_patient_last_name(self, obj):
-        # Access the patient object from the appointment instance and get the last name
         patient = obj.patient
         if patient:
             return patient.last_name
@@ -109,7 +123,7 @@ class RadiologistDoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = RadiologistDoctor
         fields = [
-            'id', 'doctor', 'image', 'patient', 'radiologist', 'prediction',
+            'id', 'doctor', 'image', 'patient', 'radiologist', 'prediction','recommendation',
             'patient_first_name', 'patient_last_name', 'patient_city', 'patient_phone',
             'patient_weight', 'patient_systolic_blood_pressure', 'patient_diastolic_blood_pressure', 'patient_blood_sugar_level','patient_heart_rate','patient_cholesterol_level','doctor_notes'
         ]
@@ -306,7 +320,6 @@ class DoctorSpecialistDataSerializer(serializers.ModelSerializer):
         return obj.patient.first_name if obj.patient else None
     def get_patient_last_name(self, obj):
         return obj.patient.last_name if obj.patient else None
-
     def get_patient_city(self, obj):
         return obj.patient.customer.city if obj.patient and hasattr(obj.patient, 'customer') else None
     def get_patient_phone(self, obj):
@@ -329,9 +342,9 @@ class DoctorSpecialistDataSerializer(serializers.ModelSerializer):
         return self._get_medical_record_field(obj, 'doctor_notes')
     def get_patient_model_prediction(self, obj):
         return self._get_radiologist_field(obj, 'prediction')
-   
+
     def get_patient_radiologist_note(self, obj):
-        return self._get_radiologist_field(obj, 'reccommendation')
+        return self._get_radiologist_field(obj, 'recommendation')
     def _get_medical_record_field(self, obj, field):
         try:
             medical_record = MedicalRecord.objects.filter(patient=obj.patient).order_by('-id').first()

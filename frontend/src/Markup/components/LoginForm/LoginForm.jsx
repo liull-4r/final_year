@@ -17,8 +17,7 @@ const LoginForm = () => {
   };
   // const Navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false); // New loading state
-
+  const [loading, setLoading] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -77,14 +76,11 @@ const LoginForm = () => {
 
       // Save access token to local storage
       localStorage.setItem("Token", access);
-      // const userData = await fetchUserData(access);
-      // console.log(userData);
       console.log(user_role);
       if (user_role === "Patient") {
         toast.success("Login successful");
         toast.dismiss(toastId);
         window.location.replace("/doctors");
-        // }
       } else if (user_role === "Doctor") {
         toast.success("Login successful");
         window.location.replace("/scan");
@@ -97,6 +93,9 @@ const LoginForm = () => {
         toast.success("Login successful");
         window.location.replace("/scan");
         toast.dismiss(toastId);
+      } else {
+        toast.error(response.data.detail);
+        toast.dismiss(toastId);
       }
     } catch (error) {
       console.log(error);
@@ -104,6 +103,8 @@ const LoginForm = () => {
       toast.dismiss(toastId);
     } finally {
       setLoading(false);
+      // Navigate("/scan");
+      toast.dismiss(toastId);
       // Set loading state to false after submission
     }
   };

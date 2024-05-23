@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./DoctorsList.css";
-const DoctorsList = () => {
+const SpecialistDoctorsList = () => {
   const [doctors, setDoctors] = useState([]);
   const [expandedBios, setExpandedBios] = useState({});
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
@@ -22,9 +24,9 @@ const DoctorsList = () => {
     fetchDoctors();
   }, []);
 
-  // const handleMakeAppointment = (doctorId) => {
-  //   navigate("/appointment", { state: { doctorIdK: doctorId } });
-  // };
+  const handlePostToDoctor = (doctorId) => {
+    navigate("/specialistdoctorresponse", { state: { doctorIdK: doctorId } });
+  };
 
   const toggleBio = (doctorId) => {
     setExpandedBios((prevState) => ({
@@ -75,6 +77,13 @@ const DoctorsList = () => {
                 Bio:{renderBio(doctor.bio, doctor.id)}
               </div>
               <br />
+              {/* <DoctorAvailable doctorId={doctor.id} /> */}
+              <button
+                className="appointment-button"
+                onClick={() => handlePostToDoctor(doctor.user_id)}
+              >
+                Post To Doctor
+              </button>
             </div>
           ))}
         </div>
@@ -83,4 +92,4 @@ const DoctorsList = () => {
   );
 };
 
-export default DoctorsList;
+export default SpecialistDoctorsList;

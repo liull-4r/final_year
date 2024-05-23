@@ -79,7 +79,7 @@ function DoctorHeader() {
                 Service
               </Link>
             </li> */}
-            <li className="link">
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -87,7 +87,7 @@ function DoctorHeader() {
               >
                 Availability
               </Link>
-            </li>
+            </li> */}
             <li className="link">
               <Link
                 onClick={handleLinkClick}
@@ -110,7 +110,7 @@ function DoctorHeader() {
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/doctorspecialistrequest"
+                to="/specialists"
               >
                 Request
               </Link>
@@ -119,7 +119,7 @@ function DoctorHeader() {
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/record"
+                to="/search"
               >
                 Add Record
               </Link>
@@ -128,7 +128,7 @@ function DoctorHeader() {
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/doctorspecialistdata"
+                to="/posttospecialistdata"
               >
                 Post to Specialist
               </Link>
@@ -137,7 +137,7 @@ function DoctorHeader() {
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/doctorradiologistpost"
+                to="/radiologistlists"
               >
                 Post to Radiologist
               </Link>

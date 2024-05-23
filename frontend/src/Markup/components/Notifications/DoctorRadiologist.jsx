@@ -36,27 +36,31 @@ const DoctorRadiologistNotification = () => {
   return (
     <div style={styles.container}>
       <h2 style={styles.heading}>Notifications {notifications.length}</h2>
-      <div style={styles.notificationContainer}>
-        {notifications.map((notification) => (
-          <div key={notification.id} style={styles.notification}>
-            {notification.message.startsWith("New Message") ? (
-              <Link
-                to={`/doctorradiologistdetail/${extractAppointmentId(
-                  notification.message
-                )}`}
-              >
+      {notifications.length === 0 ? (
+        <p>No notifications Availabe</p>
+      ) : (
+        <div style={styles.notificationContainer}>
+          {notifications.map((notification) => (
+            <div key={notification.id} style={styles.notification}>
+              {notification.message.startsWith("New Message") ? (
+                <Link
+                  to={`/doctorradiologistdetail/${extractAppointmentId(
+                    notification.message
+                  )}`}
+                >
+                  <p>{notification.message}</p>
+                </Link>
+              ) : notification.message.startsWith("New MRI scan") ? (
+                <Link to={`/scans/${extractMRIScanId(notification.message)}`}>
+                  <p>{notification.message}</p>
+                </Link>
+              ) : (
                 <p>{notification.message}</p>
-              </Link>
-            ) : notification.message.startsWith("New MRI scan") ? (
-              <Link to={`/scans/${extractMRIScanId(notification.message)}`}>
-                <p>{notification.message}</p>
-              </Link>
-            ) : (
-              <p>{notification.message}</p>
-            )}
-          </div>
-        ))}
-      </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

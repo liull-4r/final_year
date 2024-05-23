@@ -1,8 +1,15 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { useLocation } from "react-router-dom";
 
 const SpecialistDoctorResponse = () => {
+  const location = useLocation();
+  const { doctorIdK } = location.state;
+  const Token = localStorage.getItem("Token");
+  const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
+  const specialistId = user?.user_id;
   const [formData, setFormData] = useState({
     message: "",
     specialist: null,
@@ -13,7 +20,8 @@ const SpecialistDoctorResponse = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  formData.specialist = specialistId;
+  formData.doctor = doctorIdK;
   const handleSubmit = async (e) => {
     const toastId = toast.loading("Posting Response ...");
     e.preventDefault();
@@ -46,32 +54,6 @@ const SpecialistDoctorResponse = () => {
             id="message"
             name="message"
             value={formData.message}
-            onChange={handleChange}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="specialist" style={styles.label}>
-            Specialist:
-          </label>
-          <input
-            type="text"
-            id="specialist"
-            name="specialist"
-            value={formData.specialist}
-            onChange={handleChange}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="doctor" style={styles.label}>
-            Doctor:
-          </label>
-          <input
-            type="text"
-            id="doctor"
-            name="doctor"
-            value={formData.doctor}
             onChange={handleChange}
             style={styles.input}
           />

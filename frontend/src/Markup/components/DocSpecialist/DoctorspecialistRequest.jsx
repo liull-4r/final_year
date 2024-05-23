@@ -1,19 +1,26 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import { jwtDecode } from "jwt-decode";
 const DoctorspecialistRequest = () => {
+  const location = useLocation();
+  const { specialistIdK } = location.state;
+  const Token = localStorage.getItem("Token");
+  const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
+  const doctorId = user?.user_id;
+
   const [formData, setFormData] = useState({
     message: "",
-    doctor: null,
-    specialist: null,
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  formData.doctor = doctorId;
+  formData.specialist = specialistIdK;
+  formData.doctor_id = doctorId;
   const handleSubmit = async (e) => {
     const toastId = toast.loading("Posting Request...");
     e.preventDefault();
@@ -35,7 +42,7 @@ const DoctorspecialistRequest = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>Doctorspecialist Request</h2>
+      <h2 style={styles.heading}>Doctor Specialist Request</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.inputGroup}>
           <label htmlFor="message" style={styles.label}>
@@ -50,7 +57,7 @@ const DoctorspecialistRequest = () => {
             style={styles.input}
           />
         </div>
-        <div style={styles.inputGroup}>
+        {/* <div style={styles.inputGroup}>
           <label htmlFor="doctor" style={styles.label}>
             Doctor:
           </label>
@@ -62,8 +69,8 @@ const DoctorspecialistRequest = () => {
             onChange={handleChange}
             style={styles.input}
           />
-        </div>
-        <div style={styles.inputGroup}>
+        </div> */}
+        {/* <div style={styles.inputGroup}>
           <label htmlFor="specialist" style={styles.label}>
             Specialist:
           </label>
@@ -75,7 +82,7 @@ const DoctorspecialistRequest = () => {
             onChange={handleChange}
             style={styles.input}
           />
-        </div>
+        </div> */}
         <button type="submit" style={styles.button}>
           Submit
         </button>
@@ -86,7 +93,7 @@ const DoctorspecialistRequest = () => {
 
 const styles = {
   container: {
-    maxWidth: "400px",
+    maxWidth: "500px",
     margin: "100px auto",
     padding: "20px",
     border: "1px solid #ccc",

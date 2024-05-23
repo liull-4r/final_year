@@ -1,24 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import "./AppointmentForm.css"; // Import custom styles
-// import { useLocation } from "react-router-dom";
-// import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 function AppointmentForm() {
   const [, setLoading] = useState(false); // New loading state
-  // const Token = localStorage.getItem("Token");
-  // const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
-  // const location = useLocation();
-  // const { doctorIdK } = location.state;
+  const Token = localStorage.getItem("Token");
+  const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
+  const specialistId = user?.user_id;
+
+  const [patients, setPatients] = useState([]);
   const [formData, setFormData] = useState({
-    appointment_datetime: null,
+    appointment_datetime: "",
     reason: "",
     notes: "",
+    patient_id: "",
+    specialist_id: specialistId,
   });
-  // const patientId = user?.user_id; // Fixed patient ID if user is not null
-  const patientId = 2; // Fixed patient ID
-  const specialistId = 5; // Fixed doctor ID
   const [error, setError] = useState("");
+
+  // Fetch patient data from the API
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/detection/getpatientsfromdoctorspecialistdata/?specialist_id=${specialistId}`
+        );
+        setPatients(response.data);
+      } catch (error) {
+        console.error("Error fetching patients:", error);
+        toast.error("Failed to fetch patients.");
+      }
+    };
+
+    fetchPatients();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,39 +46,37 @@ function AppointmentForm() {
     setError(""); // Clear previous errors
     setLoading(true); // Set loading state to true when submitting
 
-    const toastId = toast.loading("Creating Appointement ...");
+    const toastId = toast.loading("Creating Appointment ...");
 
     try {
       // Validate form data
-      if (!formData.appointment_datetime || !formData.reason) {
+      if (
+        !formData.appointment_datetime ||
+        !formData.reason ||
+        !formData.patient_id
+      ) {
         setError("All fields are required.");
         return;
       }
-      // Check if patientId is null
-      if (!patientId) {
-        setError("Patient ID is missing.");
-        return;
-      }
-      // Set fixed patient and doctor IDs
-      formData.patient_id = patientId;
-      formData.specialist_id = specialistId;
-      // Assuming you have an API endpoint for creating appointments
+
       const response = await axios.post(
         "http://localhost:9000/detection/appointments/",
         formData
       );
-      console.log(response);
+
       if (response.status === 201) {
-        toast.success("Appointment Created successful");
-        toast.dismiss(toastId); // Reset form after successful submission
+        toast.success("Appointment Created successfully");
+        toast.dismiss(toastId);
         setFormData({
-          appointment_datetime: null,
+          appointment_datetime: "",
           reason: "",
           notes: "",
+          patient_id: "",
+          specialist_id: specialistId,
         });
       }
     } catch (error) {
-      console.log("Error creating appointment:", error);
+      console.error("Error creating appointment:", error);
       setError("An error occurred while creating the appointment.");
       toast.error("An error has occurred. Please try again later.");
       toast.dismiss(toastId);
@@ -84,6 +98,7 @@ function AppointmentForm() {
             value={formData.appointment_datetime}
             onChange={handleChange}
             className="form-control"
+            required
           />
         </div>
         <div className="form-group">
@@ -94,6 +109,7 @@ function AppointmentForm() {
             value={formData.reason}
             onChange={handleChange}
             className="form-control"
+            required
           />
         </div>
         <div className="form-group">
@@ -104,6 +120,23 @@ function AppointmentForm() {
             onChange={handleChange}
             className="form-control"
           />
+        </div>
+        <div className="form-group">
+          <label>Patient:</label>
+          <select
+            name="patient_id"
+            value={formData.patient_id}
+            onChange={handleChange}
+            className="form-control"
+            required
+          >
+            <option value="">Select a patient</option>
+            {patients.map((patient) => (
+              <option key={patient.patient_id} value={patient.patient_id}>
+                {patient.patient_first_name} {patient.patient_last_name}
+              </option>
+            ))}
+          </select>
         </div>
         <button type="submit" className="btn btn-primary">
           Create Appointment

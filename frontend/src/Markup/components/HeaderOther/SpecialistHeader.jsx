@@ -82,7 +82,7 @@ function SpecialistHeader() {
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/specialistdoctorresponse"
+                to="/responsetodoctor"
               >
                 Response to Doctor
               </Link>

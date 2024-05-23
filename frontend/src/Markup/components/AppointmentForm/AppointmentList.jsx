@@ -51,23 +51,11 @@ const AppointmentList = () => {
       ) : (
         <div>
           {appointments.length === 0 ? (
-            <div>No data available</div>
+            <div>No Appointement is available</div>
           ) : (
             <div className="appointment-cards">
               {appointments.map((appointment) => (
                 <div key={appointment.id} className="appointment-card">
-                  {/* <h3>Appointment ID: {appointment.id}</h3>
-                  <p>Date: {formatDate(appointment.appointment_datetime)}</p>
-                  <p>Time: {formatTime(appointment.appointment_datetime)}</p>
-                  <p>Reason: {appointment.reason}</p>
-                  <p>Notes: {appointment.notes}</p>
-                  <p>
-                    Patient Name: {appointment.patient_first_name}{" "}
-                    {appointment.patient_last_name}
-                  </p>
-                  <p>City: {appointment.patient_city}</p>
-                  <p>Phone: {appointment.patient_phone}</p> */}
-
                   <table
                     style={{
                       margin: "auto",

@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./DoctorsList.css";
-const DoctorsList = () => {
+// import DoctorAvailable from "./DoctorAvailable";
+const DoctorListRadiologist = () => {
   const [doctors, setDoctors] = useState([]);
   const [expandedBios, setExpandedBios] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Added loading state
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
@@ -18,13 +22,12 @@ const DoctorsList = () => {
         setLoading(false);
       }
     };
-
     fetchDoctors();
   }, []);
 
-  // const handleMakeAppointment = (doctorId) => {
-  //   navigate("/appointment", { state: { doctorIdK: doctorId } });
-  // };
+  const handlePostToDoctor = (doctorId) => {
+    navigate("/radiologistdoctorpost", { state: { doctorIdK: doctorId } });
+  };
 
   const toggleBio = (doctorId) => {
     setExpandedBios((prevState) => ({
@@ -75,6 +78,13 @@ const DoctorsList = () => {
                 Bio:{renderBio(doctor.bio, doctor.id)}
               </div>
               <br />
+              {/* <DoctorAvailable doctorId={doctor.id} /> */}
+              <button
+                className="appointment-button"
+                onClick={() => handlePostToDoctor(doctor.user_id)}
+              >
+                Post To Doctor
+              </button>
             </div>
           ))}
         </div>
@@ -83,4 +93,4 @@ const DoctorsList = () => {
   );
 };
 
-export default DoctorsList;
+export default DoctorListRadiologist;
