@@ -110,7 +110,7 @@ const DoctorRadiologistDetail = () => {
           </tr>
           <tr>
             <td style={{ border: "1px solid black", padding: "8px" }}>
-              Doctor Notes:
+              Doctor Diagnosis:
             </td>
             <td style={{ border: "1px solid black", padding: "8px" }}>
               {appointment.doctor_notes}
@@ -119,15 +119,7 @@ const DoctorRadiologistDetail = () => {
 
           <tr>
             <td style={{ border: "1px solid black", padding: "8px" }}>
-              Reason:
-            </td>
-            <td style={{ border: "1px solid black", padding: "8px" }}>
-              {appointment.reason}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ border: "1px solid black", padding: "8px" }}>
-              Notes:
+              Doctor Diagnosis:
             </td>
             <td style={{ border: "1px solid black", padding: "8px" }}>
               {appointment.notes}

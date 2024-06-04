@@ -1,4 +1,4 @@
-import logoblack from "../../../assets/img/Custom/logoblack.png";
+// import logoblack from "../../../assets/img/Custom/logoblack.png";
 import { IoCloseSharp } from "react-icons/io5";
 import { IoIosMenu } from "react-icons/io";
 import loginService from "../../../Services/login.service";
@@ -39,9 +39,6 @@ function SpecialistHeader() {
     <header id="header" className="fixed-top d-flex align-items-center">
       <div className="container d-flex align-items-center">
         <div className="logo me-auto mt-1 d-flex align-items-center">
-          <Link onClick={scrollToTop} to="/">
-            <img src={logoblack} alt="logo" loading="lazy" />
-          </Link>
           <Link
             onClick={scrollToTop}
             className="logotext"
@@ -73,20 +70,30 @@ function SpecialistHeader() {
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
+                to="/appointement-list"
+              >
+                Appointement List
+              </Link>
+            </li>
+            {/* <li className="link">
+              <Link
+                onClick={handleLinkClick}
+                className="nav-link scrollto"
                 to="/service"
               >
                 Service
               </Link>
-            </li>
+            </li> */}
             <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/responsetodoctor"
+                to="/allspecialistresponse"
               >
                 Response to Doctor
               </Link>
             </li>
+
             <li className="link">
               <Link
                 onClick={handleLinkClick}

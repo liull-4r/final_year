@@ -1,9 +1,15 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "./MedicalRecordsForm.css"; // Custom CSS
-
+import { useLocation } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 const MedicalRecordsFormUpdate = () => {
+  const location = useLocation();
+  const { customerIDK } = location.state;
+  const Token = localStorage.getItem("Token");
+  const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
+  const doctorId = user?.user_id;
   const [formData, setFormData] = useState({
     weight: null,
     systolic_blood_pressure: null,
@@ -12,13 +18,15 @@ const MedicalRecordsFormUpdate = () => {
     heart_rate: null,
     cholesterol_level: null,
     doctor_notes: "",
-    doctor: null,
-    patient: null,
+    doctor: doctorId,
+    patient: customerIDK,
   });
 
   useEffect(() => {
     axios
-      .get("http://localhost:9000/detection/medicalrecords/?patient_id=2")
+      .get(
+        `http://localhost:9000/detection/medicalrecords/?patient_id=${customerIDK}`
+      )
       .then((response) => {
         if (response.data.length > 0) {
           setFormData(response.data[0]);
@@ -45,7 +53,7 @@ const MedicalRecordsFormUpdate = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        "http://localhost:9000/detection/medicalrecords/?patient_id=2",
+        `http://localhost:9000/detection/medicalrecords/?patient_id=${customerIDK}`,
         formData
       );
       console.log("Data updated successfully!", response);
@@ -131,7 +139,7 @@ const MedicalRecordsFormUpdate = () => {
         </div>
       </div>
       <div className="mb-3">
-        <label>Doctor Notes:</label>
+        <label>Doctor Diagnosis:</label>
         <textarea
           className="form-control"
           name="doctor_notes"
@@ -139,28 +147,7 @@ const MedicalRecordsFormUpdate = () => {
           onChange={handleChange}
         />
       </div>
-      <div className="row mb-3">
-        <div className="col-md-6">
-          <label>Doctor:</label>
-          <input
-            type="text"
-            className="form-control"
-            name="doctor"
-            value={formData.doctor || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="col-md-6">
-          <label>Patient:</label>
-          <input
-            type="text"
-            className="form-control"
-            name="patient"
-            value={formData.patient || ""}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
+
       <button type="submit" className="btn btn-primary">
         Update
       </button>

@@ -22,23 +22,11 @@ function ApplyNow() {
             variant="h3"
             sx={{
               margin: 2,
-              fontSize: isDesktop ? "2.5rem" : "1.5rem", // Adjust font size based on screen size
+              fontSize: isDesktop ? "2rem" : "1rem", // Adjust font size based on screen size
             }}
           >
-            Don't give up on your dreams Just
+            Scan With Confidence
           </Typography>
-          <div className="text-center text-lg-start">
-            <Link
-              to="/register"
-              onClick={scrollToTop}
-              className="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center"
-            >
-              <span>APPLY NOW!</span>
-              <i>
-                <FaArrowRightLong />
-              </i>
-            </Link>
-          </div>
         </div>
       </div>
     </section>

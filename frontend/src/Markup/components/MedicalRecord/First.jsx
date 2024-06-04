@@ -103,7 +103,15 @@ function OrderListForm() {
         {searching && ( // Only render the table if searching is true
           <div className="table-responsive">
             {noResults ? (
-              <p>There is no patient found with the given user name.</p>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: "25px",
+                  marginTop: "20px",
+                }}
+              >
+                There is no patient found with the given user name.
+              </p>
             ) : (
               <Table striped bordered hover>
                 <thead>

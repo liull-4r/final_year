@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-
 const DoctorRadiologistNotification = () => {
   const Token = localStorage.getItem("Token");
   const user = Token ? jwtDecode(Token) : null;

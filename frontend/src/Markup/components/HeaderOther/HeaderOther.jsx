@@ -61,7 +61,7 @@ function DoctorHeader() {
           <ul className="header">
             <IoCloseSharp onClick={handleShow} className="mobile-nav-toggle" />
 
-            {/* <li className="link">
+            <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -69,8 +69,8 @@ function DoctorHeader() {
               >
                 About Us
               </Link>
-            </li> */}
-            {/* <li className="link">
+            </li>
+            <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -78,70 +78,48 @@ function DoctorHeader() {
               >
                 Service
               </Link>
-            </li> */}
-            {/* <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/availability"
-              >
-                Availability
-              </Link>
-            </li> */}
+            </li>
+
             <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/specialistdoctornotification"
+                to="/alldoctornotification"
               >
-                Specialist Notifications
+                Notifications
               </Link>
             </li>
+
             <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/radiologistdoctornotification"
+                to="/alldoctormessage"
               >
-                Radiologist Notifications
+                Messages
               </Link>
             </li>
+
             <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/specialists"
+                to="/alldoctorupload"
               >
-                Request
+                Upload
               </Link>
             </li>
+
             <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/search"
+                to="/alldoctorrecord"
               >
-                Add Record
+                Medical Record
               </Link>
             </li>
-            <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/posttospecialistdata"
-              >
-                Post to Specialist
-              </Link>
-            </li>
-            <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/radiologistlists"
-              >
-                Post to Radiologist
-              </Link>
-            </li>
+
             <li className="link">
               <Link
                 onClick={handleLinkClick}
@@ -152,7 +130,7 @@ function DoctorHeader() {
               </Link>
             </li>
 
-            {/* <li className="link">
+            <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -170,7 +148,7 @@ function DoctorHeader() {
               >
                 Contact
               </Link>
-            </li> */}
+            </li>
             {isLogged ? (
               <li>
                 <Link

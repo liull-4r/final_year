@@ -136,14 +136,7 @@ const AppointmentDetail = () => {
               {formatTime(appointment.appointment_datetime)}
             </td>
           </tr>
-          <tr>
-            <td style={{ border: "1px solid black", padding: "8px" }}>
-              Reason:
-            </td>
-            <td style={{ border: "1px solid black", padding: "8px" }}>
-              {appointment.reason}
-            </td>
-          </tr>
+         
           <tr>
             <td style={{ border: "1px solid black", padding: "8px" }}>
               Notes:

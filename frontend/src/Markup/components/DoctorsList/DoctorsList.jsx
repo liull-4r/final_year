@@ -22,9 +22,6 @@ const DoctorsList = () => {
     fetchDoctors();
   }, []);
 
-  // const handleMakeAppointment = (doctorId) => {
-  //   navigate("/appointment", { state: { doctorIdK: doctorId } });
-  // };
 
   const toggleBio = (doctorId) => {
     setExpandedBios((prevState) => ({

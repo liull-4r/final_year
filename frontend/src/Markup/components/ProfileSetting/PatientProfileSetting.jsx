@@ -60,10 +60,9 @@ function UserProfile() {
       });
   };
 
-
   return (
     <div className="containerone" style={{ marginTop: "5rem" }}>
-      <h2>User Profile</h2>
+      <h2>Profile</h2>
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">

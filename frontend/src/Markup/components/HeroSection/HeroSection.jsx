@@ -14,7 +14,7 @@ function HeroSection() {
         className="d-flex align-items-center container-fluid justify-content-center"
       >
         <Box className="container" data-aos="fade-up" sx={{ width: "90vw" }}>
-          <Grid container spacing={10} textAlign="center">
+          <Grid container spacing={10}>
             <Grid
               className="hero-text"
               item
@@ -22,17 +22,19 @@ function HeroSection() {
               sx={{ marginBottom: { xs: 0, sm: 10 } }}
             >
               <Typography variant="h1" sx={{ fontSize: "3rem" }}>
-                Hey!
+                "Empowering Health"
               </Typography>
-              <Typography variant="h2" sx={{ fontSize: "2rem" }}>
-                <span>Finally</span>, You came to the right place. How you
-                Doing?
+              <Typography variant="h2" sx={{ fontSize: "3rem" }}>
+                <span>Through</span>, Technology
+              </Typography>
+              <Typography variant="p" sx={{ fontSize: "1rem", color: "white" }}>
+                <span>Advanced</span>, Brain Tumor Detection
               </Typography>
             </Grid>
             <Grid
               item
               className="hero-btn"
-              xs={11}
+              xs={8}
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -42,22 +44,19 @@ function HeroSection() {
               <Button
                 onClick={scrollToTop}
                 component={Link}
-                to="/register"
+                to="/login"
                 variant="contained"
                 className="btn-create-account"
-                sx={{ margin: "0 5vw" }}
+                sx={{
+                  margin: "0",
+                  fontSize: "10px", // Decrease the font size
+                  textTransform: "none", // Remove uppercase transformation
+                  "& .MuiButton-label": {
+                    textTransform: "capitalize", // Capitalize the first letter of each word
+                  },
+                }}
               >
-                Sign Up
-              </Button>
-              <Button
-                onClick={scrollToTop}
-                component={Link}
-                to="/login"
-                variant="outlined"
-                className="btn-apply-now"
-                sx={{ margin: "0 5vw" }}
-              >
-                Login
+                Get Started
               </Button>
             </Grid>
           </Grid>

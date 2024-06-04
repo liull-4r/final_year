@@ -108,7 +108,7 @@ const RadiologistDoctorForm = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="prediction">Prediction:</label>
+          <label htmlFor="prediction">Diagnosis:</label>
           <textarea
             id="prediction"
             name="prediction"

@@ -80,14 +80,11 @@ function CustomerProfileSetting() {
   console.log(customerData);
   return (
     <div className="containerone">
-      <h2>Customer Profile</h2>
-
       <div style={{ marginBottom: "10rem" }}>
         <div
           className="w-100 mb-3 rounded mb-5 p-2"
           style={{ background: "#f8f9fa" }}
         >
-          <h5 className="text-title mb-2 mt-3">Update Your Information</h5>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Phone:</label>
@@ -125,7 +122,12 @@ function CustomerProfileSetting() {
             </div>
 
             <div className="form-group">
-              <label>Bio:</label>
+              {userRole == "Patient" ? (
+                <label>Additional Information:</label>
+              ) : (
+                <label>Bio:</label>
+              )}
+
               <textarea
                 name="bio"
                 value={customerData.bio}
@@ -133,22 +135,19 @@ function CustomerProfileSetting() {
                 className="form-control"
               ></textarea>
             </div>
-
-            <div className="form-group">
-              <label>Upload Image:</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="form-control-file"
-              />
-              {/* {
-                customerData.image && (
-                  <p>Uploaded image: {customerData.image}</p>
-                )
-                // {userData.odf_file &&}
-              } */}
-            </div>
+            {userRole !== "Patient" ? (
+              <div className="form-group">
+                <label>Upload Image:</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="form-control-file"
+                />
+              </div>
+            ) : (
+              ""
+            )}
 
             <button type="submit" className="btn btn-primary">
               Update Profile

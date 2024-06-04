@@ -8,11 +8,9 @@ function AppointmentForm() {
   const Token = localStorage.getItem("Token");
   const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
   const specialistId = user?.user_id;
-
   const [patients, setPatients] = useState([]);
   const [formData, setFormData] = useState({
     appointment_datetime: "",
-    reason: "",
     notes: "",
     patient_id: "",
     specialist_id: specialistId,
@@ -50,11 +48,7 @@ function AppointmentForm() {
 
     try {
       // Validate form data
-      if (
-        !formData.appointment_datetime ||
-        !formData.reason ||
-        !formData.patient_id
-      ) {
+      if (!formData.appointment_datetime || !formData.patient_id) {
         setError("All fields are required.");
         return;
       }
@@ -69,7 +63,6 @@ function AppointmentForm() {
         toast.dismiss(toastId);
         setFormData({
           appointment_datetime: "",
-          reason: "",
           notes: "",
           patient_id: "",
           specialist_id: specialistId,
@@ -101,17 +94,7 @@ function AppointmentForm() {
             required
           />
         </div>
-        <div className="form-group">
-          <label>Reason:</label>
-          <input
-            type="text"
-            name="reason"
-            value={formData.reason}
-            onChange={handleChange}
-            className="form-control"
-            required
-          />
-        </div>
+
         <div className="form-group">
           <label>Notes:</label>
           <textarea

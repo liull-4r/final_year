@@ -69,6 +69,20 @@ import RadiologistList from "./Markup/components/DoctorsList/RadiologistList";
 import DoctorListRadiologist from "./Markup/components/DoctorsList/DoctorListRadiologist";
 import SpecialistDoctorsList from "./Markup/components/DoctorsList/SpecialistDoctorsList";
 import OrderListForm from "./Markup/components/MedicalRecord/First";
+import SpecialistAppointementList from "./Markup/components/AppointmentForm/SpecialistAppointementList";
+import ReceptionistHeader from "./Markup/components/HeaderOther/ReceptionistHeader";
+import SearchForUpdate from "./Markup/components/MedicalRecord/Second";
+import SpecialistDoctorForRecommendation from "./Markup/components/DoctorsList/SpecialistDoctorForRecommendation";
+import SearchForRecommendation from "./Markup/components/MedicalRecord/Third";
+import DoctorPatient from "./Markup/components/Notifications/DoctorPatient";
+import DoctorPatientDetail from "./Markup/components/Notifications/DoctorPatientDetail";
+import DoctorPatientMessage from "./Markup/components/Reccomenddation/DoctorPatientMessage";
+import SearchForMessage from "./Markup/components/MedicalRecord/Fourth";
+import AllDoctorMessage from "./Markup/pages/AllDoctorMessage";
+import AllDoctorNotification from "./Markup/pages/AllDoctorNotification";
+import AllDoctorRecord from "./Markup/pages/AllDoctorRecord";
+import AllDoctorUpload from "./Markup/pages/AllDoctorUpload";
+import AllSpecialistResponse from "./Markup/pages/AllSpecialistResponse";
 
 function App() {
   const { userRole } = useUserRole();
@@ -101,8 +115,10 @@ function App() {
               {userRole === "Doctor" && <DoctorHeader />}
               {userRole === "Radiologist" && <RadiologistHeader />}
               {userRole === "Specialist" && <SpecialistHeader />}
+              {userRole === "Receptionist" && <ReceptionistHeader />}
               {userRole !== "Doctor" &&
                 userRole !== "Radiologist" &&
+                userRole !== "Receptionist" &&
                 userRole !== "Specialist" && <Header />}
               <Login />
               <Footer />
@@ -111,10 +127,10 @@ function App() {
         />
 
         <Route
-          path="/register"
+          path="/add-patient"
           element={
             <>
-              {userRole == "Doctor" ? <DoctorHeader /> : <Header />}
+              <ReceptionistHeader />
               <Register />
               <Footer />
             </>
@@ -124,7 +140,7 @@ function App() {
           path="/forgot"
           element={
             <>
-              {userRole == "Doctor" ? <DoctorHeader /> : <Header />}
+              <Header />
               <Forgot />
               <Footer />
             </>
@@ -137,8 +153,10 @@ function App() {
               {userRole === "Doctor" && <DoctorHeader />}
               {userRole === "Radiologist" && <RadiologistHeader />}
               {userRole === "Specialist" && <SpecialistHeader />}
+              {userRole === "Receptionist" && <ReceptionistHeader />}
               {userRole !== "Doctor" &&
                 userRole !== "Radiologist" &&
+                userRole !== "Receptionist" &&
                 userRole !== "Specialist" && <Header />}
               <About />
               <Footer />
@@ -188,12 +206,20 @@ function App() {
               {userRole === "Doctor" && <DoctorHeader />}
               {userRole === "Radiologist" && <RadiologistHeader />}
               {userRole === "Specialist" && <SpecialistHeader />}
+              {userRole === "Receptionist" && <ReceptionistHeader />}
               {userRole !== "Doctor" &&
                 userRole !== "Radiologist" &&
+                userRole !== "Receptionist" &&
                 userRole !== "Specialist" && <Header />}
 
               <PrivateAuthRoute
-                roles={["Patient", "Doctor", "Radiologist", "Specialist"]}
+                roles={[
+                  "Patient",
+                  "Doctor",
+                  "Radiologist",
+                  "Specialist",
+                  "Receptionist",
+                ]}
               >
                 <PatientProfileSetting />
                 <CustomerProfile />
@@ -230,6 +256,66 @@ function App() {
               <DoctorHeader />
               <PrivateAuthRoute roles={["Doctor"]}>
                 <NotificationsList />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/alldoctormessage"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <AllDoctorMessage />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/alldoctornotification"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <AllDoctorNotification />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/allspecialistresponse"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Specialist"]}>
+                <AllSpecialistResponse />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/alldoctorupload"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <AllDoctorUpload />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/alldoctorrecord"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <AllDoctorRecord />
               </PrivateAuthRoute>
               <Footer />
             </>
@@ -424,14 +510,28 @@ function App() {
           }
         />
         <Route
+          path="/doctorpatientnotifications"
+          element={
+            <>
+              <Header />
+              <PrivateAuthRoute roles={["Patient"]}>
+                <DoctorPatient />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
           path="/contact"
           element={
             <>
               {userRole === "Doctor" && <DoctorHeader />}
               {userRole === "Radiologist" && <RadiologistHeader />}
               {userRole === "Specialist" && <SpecialistHeader />}
+              {userRole === "Receptionist" && <ReceptionistHeader />}
               {userRole !== "Doctor" &&
                 userRole !== "Radiologist" &&
+                userRole !== "Receptionist" &&
                 userRole !== "Specialist" && <Header />}
               <Contact />
               <Footer />
@@ -442,7 +542,7 @@ function App() {
           path="/unauthorized"
           element={
             <>
-              {userRole == "Patient" ? <Header /> : <DoctorHeader />}
+              <Header />
               <UnAuthorized />
               <Footer />
             </>
@@ -460,18 +560,30 @@ function App() {
             </>
           }
         /> */}
-        {/* <Route
+        <Route
           path="/appointement-list"
           element={
             <>
-              {userRole == "Patient" ? <Header /> : <DoctorHeader />}
-              <PrivateAuthRoute roles={["Patient"]}>
-                <AppointmentList />
+              <SpecialistHeader />
+              <PrivateAuthRoute roles={["Specialist"]}>
+                <SpecialistAppointementList />
               </PrivateAuthRoute>
               <Footer />
             </>
           }
-        /> */}
+        />
+        <Route
+          path="/specialistdoctorforrecommendation"
+          element={
+            <>
+              <SpecialistHeader />
+              <PrivateAuthRoute roles={["Specialist"]}>
+                <SpecialistDoctorForRecommendation />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
         <Route
           path="/scan"
           element={
@@ -521,8 +633,10 @@ function App() {
               {userRole === "Doctor" && <DoctorHeader />}
               {userRole === "Radiologist" && <RadiologistHeader />}
               {userRole === "Specialist" && <SpecialistHeader />}
+              {userRole === "Receptionist" && <ReceptionistHeader />}
               {userRole !== "Doctor" &&
                 userRole !== "Radiologist" &&
+                userRole !== "Receptionist" &&
                 userRole !== "Specialist" && <Header />}
               <ServicesPage />
               <Footer />
@@ -651,6 +765,18 @@ function App() {
           }
         />
         <Route
+          path="/doctorpatientdetail/:id"
+          element={
+            <>
+              <Header />
+              <PrivateAuthRoute roles={["Patient"]}>
+                <DoctorPatientDetail />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
           path="/specialists"
           element={
             <>
@@ -699,6 +825,18 @@ function App() {
           }
         />
         <Route
+          path="/doctorpatientmessage"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <DoctorPatientMessage />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
           path="/responsetodoctor"
           element={
             <>
@@ -717,6 +855,42 @@ function App() {
               <DoctorHeader />
               <PrivateAuthRoute roles={["Doctor"]}>
                 <OrderListForm />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/searchformessage"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <SearchForMessage />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/searchforrecommendation"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <SearchForRecommendation />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/searchforupdate"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <SearchForUpdate />
               </PrivateAuthRoute>
               <Footer />
             </>

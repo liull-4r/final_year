@@ -13,12 +13,13 @@ class Customer(models.Model):
     ROLE_PATIENT="Patient"
     ROLE_SPECIALIST="Specialist"
     ROLE_RADIOLOGIST="Radiologist"
-    
+    ROLE_MEDICAL_RECEPTIONIST="Receptionist"
     ROLE_CHOICES = [
         (ROLE_DOCTOR, 'Doctor'),
         (ROLE_PATIENT, 'Patient'),
         (ROLE_SPECIALIST, 'Specialist'),
         (ROLE_RADIOLOGIST, 'Radiologist'),
+        (ROLE_MEDICAL_RECEPTIONIST,'Receptionist')
     ]
     phone = models.CharField(max_length=15)
     city = models.CharField(max_length=50)
@@ -32,37 +33,29 @@ class Customer(models.Model):
         if self.user:
             return self.user.last_name
         else:
-            return "No User"  # or any default value you prefer if user is None
+            return "No User"  
 
     @admin.display(ordering='user__first_name')
     def first_name(self):
         if self.user:
             return self.user.first_name
         else:
-            return "No User"  # or any default value you prefer if user is None
+            return "No User"  
         
-class MriScanImage(models.Model):
-    image = models.ImageField(upload_to='scans/', validators=[validate_file_size])
-    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_images')
-    patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='patient_images')
-    def __str__(self):
-        return f"Image for {self.patient.username} with {self.doctor.username}"
+
 
 class Appointment(models.Model):
     patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='patient_appointments')
     specialist = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='specialist_patient_appointments')
     appointment_datetime = models.DateTimeField()
-    reason = models.CharField(max_length=255, blank=True)
     notes = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=[('Scheduled', 'Scheduled'), ('Cancelled', 'Cancelled'), ('Completed', 'Completed')], default='Scheduled')
     def __str__(self):
-        return f"Appointment for {self.patient.username} with {self.doctor.username} at {self.appointment_datetime}"
-        
+        return f"Appointment for {self.patient.username} with {self.doctor.username} at {self.appointment_datetime}" 
 class DoctorRadiologist(models.Model):
     patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='patient_radiologist_appointments')
     doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_radiologist_appointments')
     radiologist= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='radiologist_appointments')
-    reason = models.CharField(max_length=255, blank=True)
     notes = models.TextField(blank=True)
     def __str__(self):
         return f"Message for {self.patient.username} with {self.radiologist.username}"
@@ -101,22 +94,22 @@ class RadiologistDoctor(models.Model):
     recommendation = models.TextField(blank=False)
     def __str__(self):
         return f"Message for {self.patient.username} with {self.radiologist.username}"
-        
+
 class Notification(models.Model):
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    patient_id = models.IntegerField()
+    specialist = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='specialist_notifications', null=True)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
 class DoctorRadiologistNotification(models.Model):
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    doctor_id = models.IntegerField()
+    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_notifications')
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
 class RadiologistDoctorNotification(models.Model):
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    radiologist_id = models.IntegerField()
+    radiologist = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='radiologist_notifications')
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
@@ -124,6 +117,10 @@ class RadiologistDoctorNotification(models.Model):
 class DoctorSpecialistRequest(models.Model):
     doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_requests')
     specialist = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='specialist_requests')
+    message = models.TextField()
+class DoctorPatientMessage(models.Model):
+    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_message')
+    patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='patient_message')
     message = models.TextField()
 
 class SpecialistDoctorResponse(models.Model):
@@ -137,48 +134,22 @@ class SpecialistDoctorRecommendation(models.Model):
     recommendation = models.TextField()
 class DoctorSpecialistNotification(models.Model):
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    doctor_id = models.IntegerField()
+    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='doctor_specialists_notifications')
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)
+class DoctorPatientMessageNotification(models.Model):
+    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_patient_messages')
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
 class SpecialistDoctorNotification(models.Model):
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    specialist_id = models.IntegerField()
+    specialist=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='specialist_doctor_notifications')
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class Availability(models.Model):
-    DAYS_OF_WEEK = [
-        ('MONDAY', 'Monday'),
-        ('TUESDAY', 'Tuesday'),
-        ('WEDNESDAY', 'Wednesday'),
-        ('THURSDAY', 'Thursday'),
-        ('FRIDAY', 'Friday'),
-        ('SATURDAY', 'Saturday'),
-        ('SUNDAY', 'Sunday'),
-    ]
-    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    day = models.CharField(max_length=10, choices=DAYS_OF_WEEK)
-    date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
 class Recomendation(models.Model):
     doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='doctor_recomendation')
     user= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='patient_recomendation')
@@ -188,7 +159,7 @@ class Recomendation(models.Model):
 
 class MedicalRecord(models.Model):
     doctor= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='doctor_records')
-    patient= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='patient_records')
+    patient= models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='patient_records')
     weight = models.FloatField()  # Weight in kilograms
     systolic_blood_pressure = models.IntegerField()
     diastolic_blood_pressure = models.IntegerField()

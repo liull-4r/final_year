@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Customer,Appointment,DoctorRadiologist,DoctorRadiologistNotification,Availability,RadiologistDoctor,RadiologistDoctorNotification,Recomendation,DoctorSpecialistData,DoctorSpecialistNotification,DoctorSpecialistRequest,SpecialistDoctorNotification,SpecialistDoctorRecommendation,SpecialistDoctorResponse,MedicalRecord
+from .models import Customer,Appointment,DoctorRadiologist,DoctorRadiologistNotification,RadiologistDoctor,RadiologistDoctorNotification,Recomendation,DoctorSpecialistData,DoctorSpecialistNotification,DoctorSpecialistRequest,SpecialistDoctorNotification,SpecialistDoctorRecommendation,SpecialistDoctorResponse,MedicalRecord
 
 # Register your models here.
 @admin.register(Customer)
@@ -11,11 +11,11 @@ class CustomerAdmin(admin.ModelAdmin):
     search_fields = ['user__first_name', 'user__last_name']
 @admin.register(DoctorRadiologist)
 class DoctorRadiologistAdmin(admin.ModelAdmin):
-    list_display = ['id','doctor_id','patient_id','radiologist_id','reason','notes']
+    list_display = ['id','doctor_id','patient_id','radiologist_id','notes']
     list_per_page=10
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ['id','appointment_datetime','reason','notes','status']
+    list_display = ['id','appointment_datetime','notes','status']
     list_per_page=10
 
 
@@ -44,10 +44,10 @@ class SpecialistDoctorNotificationAdmin(admin.ModelAdmin):
     list_per_page=10
 
 
-@admin.register(Availability)
-class AvailabilityAdmin(admin.ModelAdmin):
-    list_display = ['doctor_id', 'day', 'start_time', 'end_time']
-    list_per_page=10
+# @admin.register(Availability)
+# class AvailabilityAdmin(admin.ModelAdmin):
+#     list_display = ['doctor_id', 'day', 'start_time', 'end_time']
+#     list_per_page=10
 @admin.register(RadiologistDoctor)
 class RadiologistDoctorAdmin(admin.ModelAdmin):
     list_display = ['id', 'prediction', 'recommendation']

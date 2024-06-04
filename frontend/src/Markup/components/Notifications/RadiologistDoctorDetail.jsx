@@ -80,7 +80,7 @@ const RadiologistDoctorDetail = () => {
           </tr>
           <tr>
             <td style={{ border: "1px solid black", padding: "8px" }}>
-              Patient Model Prediction:
+              Radiologist Diagnosis:
             </td>
             <td style={{ border: "1px solid black", padding: "8px" }}>
               {appointment.prediction}
@@ -128,10 +128,18 @@ const RadiologistDoctorDetail = () => {
           </tr>
           <tr>
             <td style={{ border: "1px solid black", padding: "8px" }}>
-              Doctor Notes:
+              Doctor Diagnosis:
             </td>
             <td style={{ border: "1px solid black", padding: "8px" }}>
               {appointment.doctor_notes}
+            </td>
+          </tr>
+          <tr>
+            <td style={{ border: "1px solid black", padding: "8px" }}>
+              Radiologist Recommendation:
+            </td>
+            <td style={{ border: "1px solid black", padding: "8px" }}>
+              {appointment.recommendation}
             </td>
           </tr>
         </tbody>

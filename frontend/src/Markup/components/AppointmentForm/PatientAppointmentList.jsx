@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Appointemet.css";
 import { jwtDecode } from "jwt-decode";
-const AppointmentList = () => {
+const PatientAppointmentList = () => {
   const Token = localStorage.getItem("Token");
   const user = Token ? jwtDecode(Token) : null;
   const [appointments, setAppointments] = useState([]);
@@ -12,7 +12,7 @@ const AppointmentList = () => {
     const fetchAppointments = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/detection/appointments/?patient_id=${user?.user_id}`
+          `http://localhost:9000/detection/patientappointmentslist/?patient_id=${user?.user_id}`
         );
         setAppointments(response.data);
         setIsLoading(false);
@@ -68,7 +68,7 @@ const AppointmentList = () => {
                         <td
                           style={{ border: "1px solid black", padding: "8px" }}
                         >
-                          Patient First Name:
+                          Specialist First Name:
                         </td>
                         <td
                           style={{ border: "1px solid black", padding: "8px" }}
@@ -80,7 +80,7 @@ const AppointmentList = () => {
                         <td
                           style={{ border: "1px solid black", padding: "8px" }}
                         >
-                          Patient Last Name:
+                          Specialist Last Name:
                         </td>
                         <td
                           style={{ border: "1px solid black", padding: "8px" }}
@@ -92,7 +92,7 @@ const AppointmentList = () => {
                         <td
                           style={{ border: "1px solid black", padding: "8px" }}
                         >
-                          Patient Phone:
+                          Specialist Phone:
                         </td>
                         <td
                           style={{ border: "1px solid black", padding: "8px" }}
@@ -104,7 +104,7 @@ const AppointmentList = () => {
                         <td
                           style={{ border: "1px solid black", padding: "8px" }}
                         >
-                          Patient City:
+                          Specialist City:
                         </td>
                         <td
                           style={{ border: "1px solid black", padding: "8px" }}
@@ -137,18 +137,7 @@ const AppointmentList = () => {
                           {formatTime(appointment.appointment_datetime)}
                         </td>
                       </tr>
-                      <tr>
-                        <td
-                          style={{ border: "1px solid black", padding: "8px" }}
-                        >
-                          Reason:
-                        </td>
-                        <td
-                          style={{ border: "1px solid black", padding: "8px" }}
-                        >
-                          {appointment.reason}
-                        </td>
-                      </tr>
+                     
                       <tr>
                         <td
                           style={{ border: "1px solid black", padding: "8px" }}
@@ -173,4 +162,4 @@ const AppointmentList = () => {
   );
 };
 
-export default AppointmentList;
+export default PatientAppointmentList;

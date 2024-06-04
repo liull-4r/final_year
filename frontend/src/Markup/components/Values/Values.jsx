@@ -12,11 +12,11 @@ function Values() {
                 {" "}
                 <RiTeamLine />
               </i>
-              <h3>Experienced Team</h3>
-              <p>
+              <h3>Efficent Process</h3>
+              {/* <p>
                 Our team consists of seasoned experts who bring years of
                 experience and wisdom to every project.
-              </p>
+              </p> */}
             </div>
           </div>
 
@@ -29,11 +29,11 @@ function Values() {
               <i>
                 <PiStudentBold />
               </i>
-              <h3>Student Centric</h3>
-              <p>
+              <h3>Empowering Patient</h3>
+              {/* <p>
                 We prioritize students at the heart of everything we do,
                 ensuring their needs are met with excellence.
-              </p>
+              </p> */}
             </div>
           </div>
 
@@ -46,11 +46,11 @@ function Values() {
               <i>
                 <MdOutlineHandshake />
               </i>
-              <h3>Trustworthy</h3>
-              <p>
+              <h3>Accessible Care</h3>
+              {/* <p>
                 Our commitment to integrity and reliability makes us a trusted
                 partner you can rely on without hesitation.
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

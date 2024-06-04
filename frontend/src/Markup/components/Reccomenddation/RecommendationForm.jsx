@@ -2,12 +2,18 @@ import { useState } from "react";
 import axios from "axios";
 import "./RecommendationForm.css";
 import { toast } from "react-toastify";
-
+import { useLocation } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 const RecommendationForm = () => {
+  const location = useLocation();
+  const { customerIDK } = location.state;
+  const Token = localStorage.getItem("Token");
+  const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
+  const doctorId = user?.user_id;
   const [formData, setFormData] = useState({
     recommendation: "",
-    doctor: "",
-    user: "",
+    doctor: doctorId,
+    user: customerIDK,
   });
 
   const handleChange = (e) => {
@@ -54,26 +60,7 @@ const RecommendationForm = () => {
             rows="4"
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="doctor">Doctor:</label>
-          <input
-            type="text"
-            id="doctor"
-            name="doctor"
-            value={formData.doctor}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="user">User:</label>
-          <input
-            type="text"
-            id="user"
-            name="user"
-            value={formData.user}
-            onChange={handleChange}
-          />
-        </div>
+
         <button type="submit">Submit</button>
       </form>
     </div>

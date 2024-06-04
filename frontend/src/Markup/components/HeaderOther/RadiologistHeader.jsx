@@ -1,4 +1,4 @@
-import logoblack from "../../../assets/img/Custom/logoblack.png";
+// import logoblack from "../../../assets/img/Custom/logoblack.png";
 import { IoCloseSharp } from "react-icons/io5";
 import { IoIosMenu } from "react-icons/io";
 import loginService from "../../../Services/login.service";
@@ -39,9 +39,6 @@ function RadiologistHeader() {
     <header id="header" className="fixed-top d-flex align-items-center">
       <div className="container d-flex align-items-center">
         <div className="logo me-auto mt-1 d-flex align-items-center">
-          <Link onClick={scrollToTop} to="/">
-            <img src={logoblack} alt="logo" loading="lazy" />
-          </Link>
           <Link
             onClick={scrollToTop}
             className="logotext"
@@ -84,7 +81,7 @@ function RadiologistHeader() {
                 className="nav-link scrollto"
                 to="/postradiotodoctor"
               >
-                Post Doctor
+                Upload to Doctor
               </Link>
             </li>
             <li className="link">
@@ -93,7 +90,7 @@ function RadiologistHeader() {
                 className="nav-link scrollto"
                 to="/doctorradiologistnotification"
               >
-                Radio Notifications
+                Radiologist Notifications
               </Link>
             </li>
             <li className="link">

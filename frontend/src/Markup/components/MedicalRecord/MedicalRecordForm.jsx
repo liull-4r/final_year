@@ -121,7 +121,7 @@ const MedicalRecordsForm = () => {
         </div>
       </div>
       <div className="mb-3">
-        <label>Doctor Notes:</label>
+        <label>Doctor diagnosis:</label>
         <textarea
           className="form-control"
           name="doctor_notes"

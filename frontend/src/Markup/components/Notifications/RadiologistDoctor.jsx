@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-// import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const RadiologistDoctorNotification = () => {
-  //   const Token = localStorage.getItem("Token");
-  //   const user = Token ? jwtDecode(Token) : null;
+  const Token = localStorage.getItem("Token");
+  const user = Token ? jwtDecode(Token) : null;
+  const doctorId = user?.user_id;
   const [notifications, setNotifications] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/detection/radiologistdoctornotifications/?doctor_id=3`
+          `http://localhost:9000/detection/radiologistdoctornotifications/?doctor_id=${doctorId}`
         );
         setNotifications(response.data);
       } catch (error) {

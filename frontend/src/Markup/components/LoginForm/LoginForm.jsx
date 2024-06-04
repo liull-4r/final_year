@@ -9,12 +9,12 @@ import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
 
 const LoginForm = () => {
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+  // const scrollToTop = () => {
+  //   window.scrollTo({
+  //     top: 0,
+  //     behavior: "smooth",
+  //   });
+  // };
   // const Navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -84,6 +84,10 @@ const LoginForm = () => {
       } else if (user_role === "Doctor") {
         toast.success("Login successful");
         window.location.replace("/scan");
+        toast.dismiss(toastId);
+      } else if (user_role === "Receptionist") {
+        toast.success("Login successful");
+        window.location.replace("/add-patient");
         toast.dismiss(toastId);
       } else if (user_role === "Radiologist") {
         toast.success("Login successful");
@@ -192,7 +196,7 @@ const LoginForm = () => {
           >
             <Link to="/forgot">Forgot Password ?</Link>
           </span>
-          <div
+          {/* <div
             className="agreement"
             style={{
               display: "flex",
@@ -210,7 +214,7 @@ const LoginForm = () => {
                 Create Account
               </Link>
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

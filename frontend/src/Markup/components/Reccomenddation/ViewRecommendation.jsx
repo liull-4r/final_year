@@ -5,7 +5,6 @@ const ViewRecommendation = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   useEffect(() => {
     // Retrieve the token from local storage
     const token = localStorage.getItem("Token");

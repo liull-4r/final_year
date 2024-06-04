@@ -1,4 +1,4 @@
-from .models import Customer,Appointment,Notification,MriScanImage,Availability,DoctorRadiologist,DoctorRadiologistNotification,RadiologistDoctor,RadiologistDoctorNotification,MedicalRecord,Recomendation,DoctorSpecialistRequest,DoctorSpecialistNotification,SpecialistDoctorResponse,SpecialistDoctorNotification,DoctorSpecialistData,SpecialistDoctorRecommendation
+from .models import Customer,Appointment,Notification,DoctorRadiologist,DoctorRadiologistNotification,RadiologistDoctor,RadiologistDoctorNotification,MedicalRecord,Recomendation,DoctorSpecialistRequest,DoctorSpecialistNotification,SpecialistDoctorResponse,SpecialistDoctorNotification,DoctorSpecialistData,SpecialistDoctorRecommendation,DoctorPatientMessage,DoctorPatientMessageNotification
 from rest_framework import serializers
 from django.conf import settings
 from drf_extra_fields.fields import Base64ImageField  # type: ignore # You need to install drf-extra-fields
@@ -22,6 +22,10 @@ class SpecialistDoctorRecommendationSerializer(serializers.ModelSerializer):
 class DoctorSpecialistRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model=DoctorSpecialistRequest
+        fields='__all__'
+class DoctorPatientMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=DoctorPatientMessage
         fields='__all__'
 
 class SpecialistDoctorResponseSerializer(serializers.ModelSerializer):
@@ -53,61 +57,7 @@ class CustomCustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ['city', 'phone']
 
-class MriScanImageSerializer(serializers.ModelSerializer):
-    patient_first_name = serializers.SerializerMethodField()
-    patient_last_name = serializers.SerializerMethodField()
-    patient_city = serializers.SerializerMethodField()
-    patient_Systolic_blood_pressure=serializers.SerializerMethodField()
-    patient_diastolic_blood_pressure=serializers.SerializerMethodField()
-    patient_blood_sugar_level=serializers.SerializerMethodField()
-    # Diastolic Blood Pressure:
-    patient_weight=serializers.SerializerMethodField()
-    patient_phone = serializers.SerializerMethodField()
-    class Meta:
-        model = MriScanImage
-        fields =['id','doctor','image','patient','patient_first_name','patient_last_name','patient_city','patient_phone','patient_weight','patient_Systolic_blood_pressure','patient_diastolic_blood_pressure','patient_blood_sugar_level']
-    def get_patient_first_name(self, obj):
-        # Access the patient object from the appointment instance and get the first name
-        patient = obj.patient
-        if patient:
-            return patient.first_name
-        return None
-    def get_patient_last_name(self, obj):
-        patient = obj.patient
-        if patient:
-            return patient.last_name
-        return None
-    def get_patient_city(self, obj):
-        patient = obj.patient
-        if patient and hasattr(patient, 'customer'):
-            return patient.customer.city
-        return None
-    def get_patient_phone(self, obj):
-        patient = obj.patient
-        if patient and hasattr(patient, 'customer'):
-            return patient.customer.phone
-        return None
-    def get_patient_weight(self, obj):
-        patient = obj.patient
-        if patient and hasattr(patient, 'medicalrecord'):
-            return patient.medicalrecord.weight
-        return None
-    def get_patient_Systolic_blood_pressure(self, obj):
-        patient = obj.patient
-        if patient and hasattr(patient, 'medicalrecord'):
-            return patient.medicalrecord.systolic_blood_pressure
-        return None
-        return None
-    def get_patient_diastolic_blood_pressure(self, obj):
-        patient = obj.patient
-        if patient and hasattr(patient, 'medicalrecord'):
-            return patient.medicalrecord.diastolic_blood_pressure
-        return None
-    def get_patient_blood_sugar_level(self, obj):
-        patient = obj.patient
-        if patient and hasattr(patient, 'medicalrecord'):
-            return patient.medicalrecord.blood_sugar_level
-        return None
+
 class RadiologistDoctorSerializer(serializers.ModelSerializer):
     patient_first_name = serializers.SerializerMethodField()
     patient_last_name = serializers.SerializerMethodField()
@@ -188,7 +138,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Appointment
-        fields = ['id', 'appointment_datetime', 'reason', 'notes', 'patient_id', 'specialist_id', 'patient_first_name', 'patient_last_name', 'patient_city', 'patient_phone','patient_weight','patient_systolic_blood_pressure','patient_diastolic_blood_pressure','patient_blood_sugar_level']
+        fields = ['id', 'appointment_datetime',  'notes', 'patient_id', 'specialist_id', 'patient_first_name', 'patient_last_name', 'patient_city', 'patient_phone','patient_weight','patient_systolic_blood_pressure','patient_diastolic_blood_pressure','patient_blood_sugar_level']
     def get_patient_first_name(self, obj):
         # Access the patient object from the appointment instance and get the first name
         patient = obj.patient
@@ -228,6 +178,44 @@ class AppointmentSerializer(serializers.ModelSerializer):
             return getattr(medical_record, field)
         except MedicalRecord.DoesNotExist:
             return None
+class GetSpecialistSerializer(serializers.ModelSerializer):
+    patient_first_name = serializers.SerializerMethodField()
+    patient_last_name = serializers.SerializerMethodField()
+    patient_city = serializers.SerializerMethodField()
+    patient_phone = serializers.SerializerMethodField()
+    # patient_systolic_blood_pressure=serializers.SerializerMethodField()
+    # patient_diastolic_blood_pressure=serializers.SerializerMethodField()
+    # patient_blood_sugar_level=serializers.SerializerMethodField()
+    # patient_weight=serializers.SerializerMethodField()
+    # # patient_document=serializers.SerializerMethodField()
+    patient_id=serializers.IntegerField()
+    specialist_id=serializers.IntegerField()
+    
+    class Meta:
+        model = Appointment
+        fields = ['id', 'appointment_datetime', 'notes', 'patient_id', 'specialist_id', 'patient_first_name', 'patient_last_name', 'patient_city', 'patient_phone']
+    def get_patient_first_name(self, obj):
+        # Access the patient object from the appointment instance and get the first name
+        specialist = obj.specialist
+        if specialist:
+            return specialist.first_name
+        return None
+    def get_patient_last_name(self, obj):
+        # Access the patient object from the appointment instance and get the last name
+        specialist = obj.specialist
+        if specialist:
+            return specialist.last_name
+        return None
+    def get_patient_city(self, obj):
+        specialist = obj.specialist
+        if specialist and hasattr(specialist, 'customer'):
+            return specialist.customer.city
+        return None
+    def get_patient_phone(self, obj):
+        specialist = obj.specialist
+        if specialist and hasattr(specialist, 'customer'):
+            return specialist.customer.phone
+        return None
 class DoctorRadiologistSerializer(serializers.ModelSerializer):
     patient_first_name = serializers.SerializerMethodField()
     patient_last_name = serializers.SerializerMethodField()
@@ -246,12 +234,11 @@ class DoctorRadiologistSerializer(serializers.ModelSerializer):
     class Meta:
         model = DoctorRadiologist
         fields = [
-            'id', 'reason', 'notes','patient_id', 'doctor_id', 'radiologist_id', 
+            'id', 'notes','patient_id', 'doctor_id', 'radiologist_id', 
             'patient_first_name', 'patient_last_name', 'patient_city', 'patient_phone',
             'patient_weight', 'patient_systolic_blood_pressure', 
             'patient_diastolic_blood_pressure', 'patient_blood_sugar_level','patient_heart_rate','patient_cholesterol_level','doctor_notes'
         ]
-
     def get_patient_first_name(self, obj):
         return obj.patient.first_name if obj.patient else None
     def get_patient_last_name(self, obj):
@@ -278,7 +265,6 @@ class DoctorRadiologistSerializer(serializers.ModelSerializer):
         return self._get_medical_record_field(obj, 'cholesterol_level')
     def get_doctor_notes(self, obj):
         return self._get_medical_record_field(obj, 'doctor_notes')
-
     def _get_medical_record_field(self, obj, field):
         try:
             medical_record = MedicalRecord.objects.filter(patient=obj.patient).order_by('-id').first()
@@ -307,7 +293,7 @@ class DoctorSpecialistDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = DoctorSpecialistData
         fields = [
-            'id', 'reason','patient_id', 'doctor_id', 'specialist_id', 
+            'id', 'message','patient_id', 'doctor_id', 'specialist_id', 
             'patient_first_name', 'patient_last_name', 'patient_city', 'patient_phone',
             'patient_weight', 'patient_systolic_blood_pressure', 
             'patient_diastolic_blood_pressure', 'patient_blood_sugar_level','patient_heart_rate','patient_cholesterol_level','doctor_notes','patient_model_prediction','patient_radiologist_note'
@@ -356,11 +342,11 @@ class DoctorSpecialistDataSerializer(serializers.ModelSerializer):
             return None
 class NotificationSerializer(serializers.ModelSerializer):
     recipient_id = serializers.IntegerField()
-    patient_id = serializers.IntegerField()
+    specialist_id = serializers.IntegerField()
     message = serializers.CharField( read_only=True)
     class Meta:
         model = Notification
-        fields = ['id', 'recipient_id', 'patient_id', 'message', 'created_at']
+        fields = ['id', 'recipient_id', 'specialist_id', 'message', 'created_at']
 
 class DoctorRadiologistNotificationSerializer(serializers.ModelSerializer):
     recipient_id = serializers.IntegerField()
@@ -385,6 +371,13 @@ class DoctorSpecialistNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = DoctorSpecialistNotification
         fields = ['id', 'recipient_id', 'doctor_id', 'message', 'created_at','read']
+class DoctorPatientMessageNotificationSerializer(serializers.ModelSerializer):
+    recipient_id = serializers.IntegerField()
+    doctor_id = serializers.IntegerField()
+    message = serializers.CharField( read_only=True)
+    class Meta:
+        model = DoctorPatientMessageNotification
+        fields = ['id', 'recipient_id', 'doctor_id', 'message', 'created_at','read']
 
 class RadiologistDoctorNotificationSerializer(serializers.ModelSerializer):
     recipient_id = serializers.IntegerField()
@@ -393,15 +386,6 @@ class RadiologistDoctorNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = RadiologistDoctorNotification
         fields = ['id', 'recipient_id', 'radiologist_id', 'message', 'read', 'created_at']
-class AvailabilitySerializer(serializers.ModelSerializer):
-    start_time_formatted = serializers.SerializerMethodField()
-    end_time_formatted = serializers.SerializerMethodField()
-    class Meta:
-        model = Availability
-        fields = ['id', 'doctor', 'day', 'date', 'start_time', 'end_time', 'start_time_formatted', 'end_time_formatted']
-    def get_start_time_formatted(self, obj):
-        return obj.start_time.strftime('%I:%M %p')
-    def get_end_time_formatted(self, obj):
-        return obj.end_time.strftime('%I:%M %p')
+
 
 

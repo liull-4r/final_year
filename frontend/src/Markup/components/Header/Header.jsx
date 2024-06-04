@@ -1,18 +1,11 @@
-// import logoblack from "../../../assets/img/Custom/logoblack.png";
 import { IoCloseSharp } from "react-icons/io5";
 import { IoIosMenu } from "react-icons/io";
-// import { useUserRole } from "../../../context/AuthContext";
 import { useAuth } from "../../../context/AuthContext";
-
 import loginService from "../../../Services/login.service";
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-
 function Header() {
-  // console.log(useUserRole());
-  // console.log(useAuth());
   const { isLogged, setIsLogged } = useAuth();
   const scrollToTop = () => {
     window.scrollTo({
@@ -80,6 +73,15 @@ function Header() {
                 to="/viewrecommendation"
               >
                 View Recommendation
+              </Link>
+            </li>
+            <li className="link">
+              <Link
+                onClick={handleLinkClick}
+                className="nav-link scrollto"
+                to="/doctorpatientnotifications"
+              >
+                View Notifications
               </Link>
             </li>
             {/* <li className="link">
@@ -161,13 +163,13 @@ function Header() {
               </li>
             ) : (
               <li>
-                <Link
+                {/* <Link
                   onClick={handleLinkClick}
-                  className="nav-link scrollto"
+                  // className="nav-link scrollto"
                   to="/register"
-                >
-                  <button className="btn btn-primary">Sign Up</button>
-                </Link>
+                > */}
+                {/* <button className="btn btn-primary">Sign Up</button> */}
+                {/* </Link> */}
               </li>
             )}
             {isLogged ? (

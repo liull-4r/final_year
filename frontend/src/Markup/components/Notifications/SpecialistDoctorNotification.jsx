@@ -7,7 +7,6 @@ const SpecialistDoctorNotification = () => {
   const Token = localStorage.getItem("Token");
   const user = Token ? jwtDecode(Token) : null;
   const [notifications, setNotifications] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {

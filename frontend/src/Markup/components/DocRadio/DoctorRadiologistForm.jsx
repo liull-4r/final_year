@@ -14,7 +14,6 @@ const DoctorRadiologistForm = () => {
 
   const [patients, setPatients] = useState([]);
   const [formData, setFormData] = useState({
-    reason: "",
     notes: "",
     patient_id: "",
     doctor_id: doctorId,
@@ -26,7 +25,7 @@ const DoctorRadiologistForm = () => {
     const fetchPatients = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/detection/getpatientsfrommedicalrecord/?doctor_id=3`
+          `http://localhost:9000/detection/getpatientsfrommedicalrecord/?doctor_id=${doctorId}`
         );
         setPatients(response.data);
       } catch (error) {
@@ -72,16 +71,7 @@ const DoctorRadiologistForm = () => {
   return (
     <div style={{ marginTop: "100px" }} className="form-container">
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="reason">Reason:</label>
-          <textarea
-            id="reason"
-            name="reason"
-            value={formData.reason}
-            onChange={handleChange}
-            rows="4"
-          />
-        </div>
+        
         <div className="form-group">
           <label htmlFor="notes">Notes:</label>
           <textarea

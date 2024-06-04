@@ -1,14 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
+import { jwtDecode } from "jwt-decode"; // Importing jwtDecode directly instead of destructuring
 
 const SpecialistRecommendation = () => {
+  const location = useLocation();
+  const { doctorIdK } = location.state;
+  const Token = localStorage.getItem("Token");
+  const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
+  const specialistId = user?.user_id;
+  const [patients, setPatients] = useState([]);
   const [formData, setFormData] = useState({
     recommendation: "",
-    specialist: null,
-    doctor: null,
-    patient: null,
+    specialist: specialistId,
+    doctor: doctorIdK,
+    patient: "", // Initialize patient as an empty string
   });
+
+  // Fetch patient data from the API
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/detection/getpatientsfromdoctorspecialistdata/?specialist_id=${specialistId}`
+        );
+        setPatients(response.data);
+      } catch (error) {
+        console.error("Error fetching patients:", error);
+        toast.error("Failed to fetch patients.");
+      }
+    };
+
+    fetchPatients();
+  }, [specialistId]); // Adding specialistId as a dependency
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,7 +51,6 @@ const SpecialistRecommendation = () => {
       console.log("Response:", response.data);
       toast.success("Recommendation posted successfully");
       toast.dismiss(toastId);
-      // Do something with the response if needed
     } catch (error) {
       console.error("Error:", error);
       toast.error("An error occurred. Please try again later.");
@@ -38,9 +62,10 @@ const SpecialistRecommendation = () => {
     <div style={styles.container}>
       <h2 style={styles.heading}>Specialist Recommendation</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
+        {/* {error && <div className="alert alert-danger">{error}</div>} */}
         <div style={styles.inputGroup}>
           <label htmlFor="recommendation" style={styles.label}>
-            Recommendation:
+            Diagnosis And Recommendation:
           </label>
           <input
             type="text"
@@ -51,44 +76,22 @@ const SpecialistRecommendation = () => {
             style={styles.input}
           />
         </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="specialist" style={styles.label}>
-            Specialist:
-          </label>
-          <input
-            type="text"
-            id="specialist"
-            name="specialist"
-            value={formData.specialist}
-            onChange={handleChange}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="doctor" style={styles.label}>
-            Doctor:
-          </label>
-          <input
-            type="text"
-            id="doctor"
-            name="doctor"
-            value={formData.doctor}
-            onChange={handleChange}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="patient" style={styles.label}>
-            Patient:
-          </label>
-          <input
-            type="text"
-            id="patient"
-            name="patient"
+        <div className="form-group">
+          <label>Patient:</label>
+          <select
+            name="patient" // Changed from "patient_id" to "patient"
             value={formData.patient}
             onChange={handleChange}
-            style={styles.input}
-          />
+            className="form-control"
+            required
+          >
+            <option value="">Select a patient</option>
+            {patients.map((patient) => (
+              <option key={patient.patient_id} value={patient.patient_id}>
+                {patient.patient_first_name} {patient.patient_last_name}
+              </option>
+            ))}
+          </select>
         </div>
         <button type="submit" style={styles.button}>
           Submit

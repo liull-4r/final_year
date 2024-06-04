@@ -47,12 +47,12 @@ const RegistrationForm = () => {
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: "" });
   };
-  const handleImageChange = (e) => {
-    setFormData({
-      ...formData,
-      image: e.target.files[0],
-    });
-  };
+  // const handleImageChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     image: e.target.files[0],
+  //   });
+  // };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -83,7 +83,7 @@ const RegistrationForm = () => {
 
     if (!agreedToReceive) {
       toast.error(
-        "Please agree to receive text messages and emails to create an account"
+        "Please agree to receive notifications and emails to create an account"
       );
       valid = false;
     }
@@ -91,7 +91,7 @@ const RegistrationForm = () => {
     if (!re_password) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        re_password: "Please confirm your password",
+        re_password: "Please confirm password",
       }));
       valid = false;
     }
@@ -108,7 +108,7 @@ const RegistrationForm = () => {
     if (!first_name) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        first_name: "Please enter your first name",
+        first_name: "Please enter first name",
       }));
       valid = false;
     }
@@ -116,14 +116,14 @@ const RegistrationForm = () => {
     if (!last_name) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        last_name: "Please enter your last name",
+        last_name: "Please enter last name",
       }));
       valid = false;
     }
     if (!username) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        username: "Please enter your user name",
+        username: "Please enter user name",
       }));
       valid = false;
     }
@@ -147,7 +147,7 @@ const RegistrationForm = () => {
     if (!phone) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        phone: "Please enter your phone number",
+        phone: "Please enter phone number",
       }));
       valid = false;
     }
@@ -155,14 +155,14 @@ const RegistrationForm = () => {
     if (!bio) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        bio: "Please enter your bio",
+        bio: "Please enter bio",
       }));
       valid = false;
     }
     if (!role) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        role: "Please select your role",
+        role: "Please select role",
       }));
       valid = false;
     }
@@ -170,7 +170,7 @@ const RegistrationForm = () => {
     if (!city) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        city: "Please enter your city",
+        city: "Please enter city",
       }));
       valid = false;
     }
@@ -178,15 +178,7 @@ const RegistrationForm = () => {
     if (!gender) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        gender: "Please select your gender",
-      }));
-      valid = false;
-    }
-
-    if (!image) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        image: "Please select your profile image",
+        gender: "Please select gender",
       }));
       valid = false;
     }
@@ -229,7 +221,7 @@ const RegistrationForm = () => {
           // console.log(res);
           if (res.status === 201) {
             toast.success(
-              "Account created successfully activating your account please check your email click on the activation link in your email"
+              "Account created successfully activating  account please check email click on the activation link in your email"
             );
             Navigate("/login");
             toast.dismiss(toastId);
@@ -252,7 +244,7 @@ const RegistrationForm = () => {
   return (
     <div className="signup">
       <div className="container1">
-        <div className="heading">Create Account</div>
+        <div className="heading">Create Patient Account</div>
         <form onSubmit={handleSubmit} className="form">
           <input
             required=""
@@ -407,7 +399,7 @@ const RegistrationForm = () => {
             value={formData.gender}
             onChange={handleChange}
           >
-            <option value="">Please select your gender</option>
+            <option value="">Please select gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
@@ -428,7 +420,7 @@ const RegistrationForm = () => {
             value={formData.role}
             onChange={handleChange}
           >
-            <option value="">Please select your role</option>
+            <option value="">Please select role</option>
             <option value="Patient">Patient</option>
           </select>
 
@@ -447,7 +439,7 @@ const RegistrationForm = () => {
             name="city"
             onChange={handleChange}
             value={formData.city}
-            placeholder="Enter Your City"
+            placeholder="Enter  City"
           />
           {errors.city && (
             <div
@@ -468,7 +460,7 @@ const RegistrationForm = () => {
             value={formData.bio} // Associate value with formData.bio
             onChange={handleChange} // Associate onChange with handleChange function
             className="input"
-            placeholder="Enter Your Bio"
+            placeholder="Enter Additional Information"
             name="bio" // Name attribute should match the key in formData state
           />
 
@@ -482,22 +474,22 @@ const RegistrationForm = () => {
           )}
           <br />
 
-          <input
+          {/* <input
             required=""
             type="file"
             id="image"
             accept="image/png, image/jpeg"
             onChange={handleImageChange}
             className="input"
-          />
-          {errors.image && (
+          /> */}
+          {/* {errors.image && (
             <div
               className="validation-error"
               style={{ color: "red", textAlign: "end" }}
             >
               {errors.image}
             </div>
-          )}
+          )} */}
           <br />
           <div className="agreed-to-receive">
             <input
@@ -508,7 +500,7 @@ const RegistrationForm = () => {
               onChange={() => setAgreedToReceive(!agreedToReceive)}
             />
             <label htmlFor="agreedToReceive">
-              I have agreed to receive text messages and emails regarding news,
+              I have agreed to receive notifications and emails regarding news,
               service updates, events, and related matters.
             </label>
           </div>
@@ -521,22 +513,6 @@ const RegistrationForm = () => {
             onClick={scrollToTop}
           />
         </form>
-        <div
-          className="agreement"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "10px", // Default gap
-          }}
-        >
-          <p className="already-account-text">Already have an account?</p>
-          <p className="sign-in-link" style={{ cursor: "pointer" }}>
-            <Link onClick={scrollToTop} to="/login" className="login-link">
-              Sign in
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   );
