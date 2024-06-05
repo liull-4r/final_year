@@ -289,7 +289,7 @@ function App() {
           path="/allspecialistresponse"
           element={
             <>
-              <DoctorHeader />
+              <SpecialistHeader />
               <PrivateAuthRoute roles={["Specialist"]}>
                 <AllSpecialistResponse />
               </PrivateAuthRoute>

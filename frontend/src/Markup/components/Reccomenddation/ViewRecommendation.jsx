@@ -51,7 +51,7 @@ const ViewRecommendation = () => {
       ) : (
         <ul>
           {recommendations.map((recommendation) => (
-            <li key={recommendation.id}>
+            <li style={{ listStyleType: "none" }} key={recommendation.id}>
               <ul>
                 <ol>{recommendation?.recommendation}</ol>
               </ul>
