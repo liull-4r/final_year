@@ -3,6 +3,7 @@ import axios from "axios";
 import "./AppointmentForm.css"; // Import custom styles
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
+
 function AppointmentForm() {
   const [, setLoading] = useState(false); // New loading state
   const Token = localStorage.getItem("Token");
@@ -24,7 +25,14 @@ function AppointmentForm() {
         const response = await axios.get(
           `http://localhost:9000/detection/getpatientsfromdoctorspecialistdata/?specialist_id=${specialistId}`
         );
-        setPatients(response.data);
+
+        // Filter to remove duplicates based on patient_id
+        const uniquePatients = response.data.filter(
+          (patient, index, self) =>
+            index === self.findIndex((p) => p.patient_id === patient.patient_id)
+        );
+
+        setPatients(uniquePatients);
       } catch (error) {
         console.error("Error fetching patients:", error);
         toast.error("Failed to fetch patients.");
@@ -32,7 +40,7 @@ function AppointmentForm() {
     };
 
     fetchPatients();
-  }, []);
+  }, [specialistId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -80,7 +88,7 @@ function AppointmentForm() {
 
   return (
     <div className="container" style={{ marginTop: "100px" }}>
-      <h2>Create Appointment</h2>
+      <h2>Schedule Appointment</h2>
       <form onSubmit={handleSubmit} className="appointment-form">
         {error && <div className="alert alert-danger">{error}</div>}
         <div className="form-group">
@@ -121,8 +129,12 @@ function AppointmentForm() {
             ))}
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Create Appointment
+        <button
+          style={{ backgroundColor: "#3368c6" }}
+          type="submit"
+          className="btn btn-primary"
+        >
+          Schedule Appointment
         </button>
       </form>
     </div>

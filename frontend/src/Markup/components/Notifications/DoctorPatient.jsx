@@ -30,6 +30,10 @@ const DoctorPatient = () => {
     const match = message.match(/\(ID: (\d+)\)/);
     return match ? match[1] : "";
   };
+
+  const removeIdFromMessage = (message) => {
+    return message.replace(/\(ID: \d+\)/, "").trim();
+  };
   const markAsRead = async (notificationId) => {
     try {
       await axios.patch(
@@ -66,7 +70,7 @@ const DoctorPatient = () => {
                     notification.message
                   )}`}
                 >
-                  <p>{notification.message}</p>
+                  <p>{removeIdFromMessage(notification.message)}</p>
                 </Link>
               ) : notification.message.startsWith("New Recommendation") ? (
                 <Link
@@ -74,13 +78,19 @@ const DoctorPatient = () => {
                     notification.message
                   )}`}
                 >
-                  <p>{notification.message}</p>
+                  <p>{removeIdFromMessage(notification.message)}</p>
                 </Link>
               ) : (
-                <p>{notification.message}</p>
+                <p>{removeIdFromMessage(notification.message)}</p>
               )}
               {!notification.read && (
-                <button onClick={() => markAsRead(notification.id)}>
+                <button
+                  style={{
+                    backgroundColor: "#3368C6",
+                    borderRadius: "20px",
+                  }}
+                  onClick={() => markAsRead(notification.id)}
+                >
                   Mark as Read
                 </button>
               )}

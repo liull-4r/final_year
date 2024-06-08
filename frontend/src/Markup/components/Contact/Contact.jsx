@@ -263,7 +263,15 @@ function Contact() {
 
               {/* Submit Button */}
               <div className="text-center">
-                <button type="submit">Send Message</button>
+                <button
+                  style={{
+                    backgroundColor: "#3368C6",
+                    borderRadius: "20px",
+                  }}
+                  type="submit"
+                >
+                  Send Message
+                </button>
               </div>
             </form>
           </div>

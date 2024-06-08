@@ -7,7 +7,7 @@ router = routers.DefaultRouter()
 router.register('customers', views.CustomerViewSet)
 router.register('appointments', views.AppointmentViewSet)
 router.register('patientappointmentslist', views.GetAppointementListBasedOnPatientViewSet,basename="patient-appointement-list")
-
+router.register('segement', views.SegmentedImagePredictionTotalViewSet, basename='segementfile')
 router.register('doctorspecialistrequest', views.DoctorSpecialistRequestViewSet)
 router.register('doctorpatientmessage', views.DoctorPatientMessageViewSet)
 router.register('specialistdoctorresponse', views.SpecialistDoctorResponseViewSet)

@@ -12,21 +12,39 @@ function AllDoctorMessage() {
         justifyContent: "center",
       }}
     >
-      <button style={{ marginTop: "20px", marginBottom: "20px" }}>
+      <button
+        style={{
+          marginTop: "20px",
+          marginBottom: "20px",
+          backgroundColor: "#3368C6",
+          padding: "10px 75px",
+        }}
+      >
         <li style={{ listStyleType: "none" }} className="link">
           <Link className="nav-link scrollto" to="/specialists">
             Request
           </Link>
         </li>
       </button>
-      <button>
+      <button
+        style={{
+          backgroundColor: "#3368C6",
+          padding: "10px 50px",
+        }}
+      >
         <li style={{ listStyleType: "none" }} className="link">
           <Link className="nav-link scrollto" to="/searchformessage">
             Send Message
           </Link>
         </li>
       </button>
-      <button style={{ marginTop: "20px", marginBottom: "20px" }}>
+      <button
+        style={{
+          marginTop: "20px",
+          marginBottom: "20px",
+          backgroundColor: "#3368C6",
+        }}
+      >
         <li style={{ listStyleType: "none" }} className="link">
           <Link className="nav-link scrollto" to="/searchforrecommendation">
             Add Recommendation

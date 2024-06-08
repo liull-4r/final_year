@@ -109,7 +109,14 @@ function UserProfile() {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        <button
+          style={{
+            backgroundColor: "#3368C6",
+            // borderRadius: "20px",
+          }}
+          type="submit"
+          className="btn btn-primary"
+        >
           Update Profile
         </button>
       </form>

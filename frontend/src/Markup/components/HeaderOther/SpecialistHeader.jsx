@@ -47,7 +47,7 @@ function SpecialistHeader() {
               fontWeight: "600",
               marginLeft: "10px",
             }}
-            to="/"
+            to="/scan"
           >
             TUMOR TRACK
           </Link>
@@ -57,7 +57,7 @@ function SpecialistHeader() {
           <ul className="header">
             <IoCloseSharp onClick={handleShow} className="mobile-nav-toggle" />
 
-            <li className="link">
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -65,7 +65,7 @@ function SpecialistHeader() {
               >
                 About Us
               </Link>
-            </li>
+            </li> */}
             <li className="link">
               <Link
                 onClick={handleLinkClick}
@@ -132,7 +132,7 @@ function SpecialistHeader() {
               </Link>
             </li>
 
-            <li className="link">
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -140,7 +140,7 @@ function SpecialistHeader() {
               >
                 Contact
               </Link>
-            </li>
+            </li> */}
             {isLogged ? (
               <li>
                 <Link
@@ -148,18 +148,26 @@ function SpecialistHeader() {
                   className="nav-link scrollto"
                   to="/profile"
                 >
-                  <button className="btn btn-primary">Profile</button>
+                  <button
+                    style={{ backgroundColor: "#3368c6", borderRadius: "15px" }}
+                  >
+                    Profile
+                  </button>
                 </Link>
               </li>
             ) : (
               <li>
-                <Link
+                {/* <Link
                   onClick={handleLinkClick}
                   className="nav-link scrollto"
                   to="/register"
                 >
-                  <button className="btn btn-primary">Sign Up</button>
-                </Link>
+                  <button
+                    style={{ backgroundColor: "#3368c6", borderRadius: "15px" }}
+                  >
+                    Sign Up
+                  </button>
+                </Link> */}
               </li>
             )}
             {isLogged ? (
@@ -172,18 +180,22 @@ function SpecialistHeader() {
                   className="nav-link scrollto"
                   to="/"
                 >
-                  <button className="btn btn-primary">Logout</button>
+                  <button
+                    style={{ backgroundColor: "#3368c6", borderRadius: "15px" }}
+                  >
+                    Logout
+                  </button>
                 </Link>
               </li>
             ) : (
               <li>
-                <Link
+                {/* <Link
                   onClick={handleLinkClick}
                   className="nav-link scrollto"
                   to="/login"
                 >
                   <button className="btn btn-primary">Login</button>
-                </Link>
+                </Link> */}
               </li>
             )}
           </ul>

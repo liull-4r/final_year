@@ -46,3 +46,14 @@ const AboutPart = () => {
 };
 
 export default AboutPart;
+
+
+
+
+
+
+
+
+
+
+

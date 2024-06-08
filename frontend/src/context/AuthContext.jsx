@@ -13,6 +13,11 @@ export const useAuth = () => {
 export const useUserRole = () => {
   return useContext(UserRoleContext);
 };
+// eslint-disable-next-line react-refresh/only-export-components
+export const useIsLogged = () => {
+  const { isLogged } = useContext(AuthContext);
+  return isLogged;
+};
 
 // eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {

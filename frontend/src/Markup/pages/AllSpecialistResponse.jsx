@@ -11,7 +11,13 @@ function AllSpecialistResponse() {
         justifyContent: "center",
       }}
     >
-      <button style={{ marginTop: "20px", marginBottom: "20px" }}>
+      <button
+        style={{
+          marginTop: "20px",
+          marginBottom: "20px",
+          backgroundColor: "#3368c6",
+        }}
+      >
         <li style={{ listStyleType: "none" }} className="link">
           <Link className="nav-link scrollto" to="/responsetodoctor">
             Response to Doctor
@@ -19,7 +25,7 @@ function AllSpecialistResponse() {
         </li>
       </button>
 
-      <button>
+      <button style={{ backgroundColor: "#3368c6",padding:"10px 60px" }}>
         <li style={{ listStyleType: "none" }} className="link">
           <Link
             className="nav-link scrollto"

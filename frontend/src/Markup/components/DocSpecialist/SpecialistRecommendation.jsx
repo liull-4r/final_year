@@ -25,7 +25,14 @@ const SpecialistRecommendation = () => {
         const response = await axios.get(
           `http://localhost:9000/detection/getpatientsfromdoctorspecialistdata/?specialist_id=${specialistId}`
         );
-        setPatients(response.data);
+
+        // Filter to remove duplicates based on patient_id
+        const uniquePatients = response.data.filter(
+          (patient, index, self) =>
+            index === self.findIndex((p) => p.patient_id === patient.patient_id)
+        );
+
+        setPatients(uniquePatients);
       } catch (error) {
         console.error("Error fetching patients:", error);
         toast.error("Failed to fetch patients.");

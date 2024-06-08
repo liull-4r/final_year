@@ -2,14 +2,18 @@ from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
 import time
 import logging
+import os
+import numpy as np
 from socket import gaierror
 from smtplib import SMTPException
+from rest_framework import status
 from django.core.mail import send_mail
 logger = logging.getLogger(__name__)
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from rest_framework.mixins import CreateModelMixin,RetrieveModelMixin,UpdateModelMixin
 from rest_framework.viewsets import ModelViewSet,GenericViewSet
+from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Customer,Appointment,Notification,Recomendation,DoctorRadiologist,DoctorRadiologistNotification,RadiologistDoctor,RadiologistDoctorNotification,MedicalRecord,DoctorSpecialistRequest,DoctorSpecialistNotification,SpecialistDoctorNotification,SpecialistDoctorResponse,DoctorSpecialistData,SpecialistDoctorRecommendation,DoctorPatientMessage,DoctorPatientMessageNotification
 from .serializers import CustomerSerializer,AppointmentSerializer,NotificationSerializer,RecomendationSerializer,DoctorRadiologistSerializer,DoctorRadiologistNotificationSerializer,RadiologistDoctorSerializer,RadiologistDoctorNotificationSerializer,MedicalRecordSerializer,DoctorSpecialistRequestSerializer,SpecialistDoctorResponseSerializer,DoctorSpecialistDataSerializer,SpecialistDoctorRecommendationSerializer,DoctorSpecialistNotificationSerializer,SpecialistDoctorNotificationSerializer,GetSpecialistSerializer,DoctorPatientMessageSerializer,DoctorPatientMessageNotificationSerializer
 from rest_framework.decorators import action
@@ -19,6 +23,37 @@ from rest_framework.response import Response
 from rest_framework.exceptions import MethodNotAllowed
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
+from tensorflow.keras.models import load_model
+from keras.utils import custom_object_scope
+from PIL import Image
+from django.core.files.storage import FileSystemStorage
+from .models import SegmentedImagePredictionTotal
+from .serializers import SegmentedImagePredictionTotalSerializer
+from .custom_losses import bce_dice_loss
+from .custom_metrics import iou_metric
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def send_email_with_retry(subject, message, from_email, recipient_list, retries=3, delay=5):
     for i in range(retries):
@@ -34,32 +69,38 @@ def send_email_with_retry(subject, message, from_email, recipient_list, retries=
                 raise e  # Raise the exception if all retries fail
 
 class RadiologistDoctorViewSet(ModelViewSet):
-    queryset = RadiologistDoctor.objects.select_related('doctor', 'patient','radiologist').all()
+    queryset = RadiologistDoctor.objects.select_related('doctor', 'patient', 'radiologist').all()
     serializer_class = RadiologistDoctorSerializer
+    
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         mriscanimage = serializer.save()
-        # Retrieve patient and doctor objects
+        
+        # Retrieve doctor, patient, and radiologist objects
         doctor_id = serializer.validated_data['doctor'].id
         patient_id = serializer.validated_data['patient'].id
         radiologist_id = serializer.validated_data['radiologist'].id
         User = get_user_model()
         doctor = User.objects.get(id=doctor_id)
         patient = User.objects.get(id=patient_id)
-        radiologist= User.objects.get(id=radiologist_id)
+        radiologist = User.objects.get(id=radiologist_id)
         
         # Construct message with patient's first name and last name
         patient_name = f"{patient.first_name} {patient.last_name}"
-        message = f"New Information Upload from Radiologist {radiologist.first_name} {radiologist.last_name} for scan image (ID: {mriscanimage.id}) scheduled for patient {patient_name}. Please review."
-        RadiologistDoctorNotification.objects.create(recipient=doctor, radiologist_id=radiologist_id, message=message)
+        message_without_id = f"New Information Upload from Radiologist {radiologist.first_name} {radiologist.last_name} for patient {patient_name}"
+        message_with_id = f"{message_without_id} (ID: {mriscanimage.id})"
+        
+        # Create RadiologistDoctorNotification without ID
+        RadiologistDoctorNotification.objects.create(recipient=doctor, radiologist_id=radiologist_id, message=message_with_id)
+        
         # Send email notification with retry logic
         sender_email = "fetamasr@gmail.com"
         recipient_email = doctor.email
         try:
             send_email_with_retry(
-                'New MRI Scan Image Notification',
-                message,
+                'New Information Upload Notification',
+                message_without_id,  # Send email without ID
                 sender_email,
                 [recipient_email],
                 retries=3,
@@ -70,7 +111,7 @@ class RadiologistDoctorViewSet(ModelViewSet):
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
+
 class GetPatientBasedOnRadiologistViewSet(ModelViewSet):
     serializer_class = DoctorRadiologistSerializer
     def get_queryset(self):
@@ -85,26 +126,35 @@ class GetPatientBasedOnRadiologistViewSet(ModelViewSet):
 class AppointmentViewSet(ModelViewSet):
     queryset = Appointment.objects.select_related('specialist', 'patient').all()
     serializer_class = AppointmentSerializer
+    
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         appointment = serializer.save()
+        
         specialist_id = serializer.validated_data['specialist_id']
         patient_id = serializer.validated_data['patient_id']
+        
         User = get_user_model()
         specialist = User.objects.get(id=specialist_id)
         patient = User.objects.get(id=patient_id)
+        
+        specialist_name = f"{specialist.first_name} {specialist.last_name}"
         patient_name = f"{patient.first_name} {patient.last_name}"
+        
         formatted_datetime = serializer.validated_data['appointment_datetime'].strftime('%A, %B %d, %Y at %I:%M %p')
-        message = f"New appointment (ID: {appointment.id}) scheduled for patient {patient_name} on {formatted_datetime}"
-        Notification.objects.create(recipient=patient, specialist_id=specialist_id, message=message)
+        
+        message_without_id = f"New appointment From Specialist {specialist_name} scheduled for you on {formatted_datetime}"
+        
+        Notification.objects.create(recipient=patient, specialist_id=specialist_id, message=message_without_id)
         
         sender_email = "fetamasr@gmail.com"
         recipient_email = patient.email
+        
         try:
             send_email_with_retry(
                 'New Appointment Notification From Specialist',
-                message,
+                message_without_id,
                 sender_email,
                 [recipient_email],
                 retries=3,
@@ -112,13 +162,16 @@ class AppointmentViewSet(ModelViewSet):
             )
         except Exception as e:
             logger.error(f"Failed to send email notification after multiple attempts: {e}")
+        
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
     def get_queryset(self):
         specialist_id = self.request.query_params.get('specialist_id')
         if specialist_id:
             return Appointment.objects.filter(specialist_id=specialist_id)
         return Appointment.objects.all()
+
     
 
 
@@ -136,28 +189,36 @@ class GetAppointementListBasedOnPatientViewSet(ModelViewSet):
 
 
 class DoctorRadiologistViewSet(ModelViewSet):
-    queryset = DoctorRadiologist.objects.select_related('doctor', 'patient','radiologist').all()
+    queryset = DoctorRadiologist.objects.select_related('doctor', 'patient', 'radiologist').all()
     serializer_class = DoctorRadiologistSerializer
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        appointment = serializer.save()
+        doctor_radiologist = serializer.save()
+
         doctor_id = serializer.validated_data['doctor_id']
         patient_id = serializer.validated_data['patient_id']
         radiologist_id = serializer.validated_data['radiologist_id']
+
         User = get_user_model()
         doctor = User.objects.get(id=doctor_id)
         patient = User.objects.get(id=patient_id)
         radiologist = User.objects.get(id=radiologist_id)
+
         patient_name = f"{patient.first_name} {patient.last_name}"
-        message = f"New Message From Doctor (ID: {appointment.id}) scheduled for patient {patient_name}"
-        DoctorRadiologistNotification.objects.create(recipient=radiologist, doctor_id=doctor_id, message=message)
+        doctor_name = f"{doctor.first_name} {doctor.last_name}"
+
+        message_without_id = f"New Message From Doctor {doctor_name} for patient {patient_name}"
+        DoctorRadiologistNotification.objects.create(recipient=radiologist, doctor_id=doctor_id, message=message_without_id)
+
         sender_email = "fetamasr@gmail.com"
         recipient_email = radiologist.email
+
         try:
             send_email_with_retry(
-                'Please See This Patient MRI Scan Image',
-                message,
+                'New Message Notification From Doctor',
+                message_without_id,
                 sender_email,
                 [recipient_email],
                 retries=3,
@@ -165,13 +226,16 @@ class DoctorRadiologistViewSet(ModelViewSet):
             )
         except Exception as e:
             logger.error(f"Failed to send email notification after multiple attempts: {e}")
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     def get_queryset(self):
         patient_id = self.request.query_params.get('patient_id')
         if patient_id:
             return DoctorRadiologist.objects.filter(patient_id=patient_id)
         return DoctorRadiologist.objects.all()
+
     
 
 
@@ -181,28 +245,36 @@ class DoctorRadiologistViewSet(ModelViewSet):
 
     
 class DoctorSpecialistDataViewSet(ModelViewSet):
-    queryset = DoctorSpecialistData.objects.select_related('doctor', 'patient','specialist').all()
+    queryset = DoctorSpecialistData.objects.select_related('doctor', 'patient', 'specialist').all()
     serializer_class = DoctorSpecialistDataSerializer
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         doctorspecialistdata = serializer.save()
+
         doctor_id = serializer.validated_data['doctor_id']
         patient_id = serializer.validated_data['patient_id']
         specialist_id = serializer.validated_data['specialist_id']
+
         User = get_user_model()
         doctor = User.objects.get(id=doctor_id)
         patient = User.objects.get(id=patient_id)
         specialist = User.objects.get(id=specialist_id)
+
         doctor_name = f"{doctor.first_name} {doctor.last_name}"
-        message = f"New Message From Doctor for data sending (ID: {doctorspecialistdata.id})  from doctor {doctor_name} for patient {patient.first_name} {patient.last_name}"
-        DoctorSpecialistNotification.objects.create(recipient=specialist, doctor_id=doctor_id, message=message)
+        patient_name = f"{patient.first_name} {patient.last_name}"
+
+        message_without_id = f"New Message From Doctor {doctor_name} for data sending for patient {patient_name}"
+        DoctorSpecialistNotification.objects.create(recipient=specialist, doctor_id=doctor_id, message=message_without_id)
+
         sender_email = "fetamasr@gmail.com"
         recipient_email = specialist.email
+
         try:
             send_email_with_retry(
-                'Please Scan This Patient MRI Scan Image',
-                message,
+                'New Message Notification From Doctor',
+                message_without_id,
                 sender_email,
                 [recipient_email],
                 retries=3,
@@ -210,13 +282,16 @@ class DoctorSpecialistDataViewSet(ModelViewSet):
             )
         except Exception as e:
             logger.error(f"Failed to send email notification after multiple attempts: {e}")
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     def get_queryset(self):
         patient_id = self.request.query_params.get('patient_id')
         if patient_id:
             return DoctorSpecialistData.objects.filter(patient_id=patient_id)
         return DoctorSpecialistData.objects.all()
+
 class GetPatientBasedOnDoctorSpecialistDataViewSet(ModelViewSet):
     serializer_class = DoctorSpecialistDataSerializer
     def get_queryset(self):
@@ -433,31 +508,36 @@ class GetPatientBasedOnMedicalRecordViewSet(ModelViewSet):
 
 
 
-
 class DoctorSpecialistRequestViewSet(ModelViewSet):
     queryset = DoctorSpecialistRequest.objects.all()
-    serializer_class=DoctorSpecialistRequestSerializer
+    serializer_class = DoctorSpecialistRequestSerializer
+    
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         doctorrequest = serializer.save()
-        # Retrieve patient and doctor objects
+        
+        # Retrieve doctor and specialist objects
         doctor_id = serializer.validated_data['doctor'].id
         specialist_id = serializer.validated_data['specialist'].id
         User = get_user_model()
         doctor = User.objects.get(id=doctor_id)
         specialist = User.objects.get(id=specialist_id)
-        # Construct message with patient's first name and last name
+        
+        # Construct message with doctor's first name and last name
         doctor_name = f"{doctor.first_name} {doctor.last_name}"
-        message = f"New Request Message From Doctor (ID: {doctorrequest.id}) Name {doctor_name}. Please review."
-        DoctorSpecialistNotification.objects.create(recipient=specialist, doctor_id=doctor_id, message=message)
+        message_without_id = f"New Request Message From Doctor {doctor_name}"
+        message_with_id = f"{message_without_id} (ID: {doctorrequest.id})"
+        
+        # Create DoctorSpecialistNotification without ID
+        DoctorSpecialistNotification.objects.create(recipient=specialist, doctor_id=doctor_id, message=message_with_id)
         
         sender_email = "fetamasr@gmail.com"
         recipient_email = specialist.email
         try:
             send_email_with_retry(
                 'New Message Notification',
-                message,
+                message_without_id,  # Send email without ID
                 sender_email,
                 [recipient_email],
                 retries=3,
@@ -465,31 +545,40 @@ class DoctorSpecialistRequestViewSet(ModelViewSet):
             )
         except Exception as e:
             logger.error(f"Failed to send email notification after multiple attempts: {e}")
+        
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 class DoctorPatientMessageViewSet(ModelViewSet):
     queryset = DoctorPatientMessage.objects.all()
-    serializer_class=DoctorPatientMessageSerializer
+    serializer_class = DoctorPatientMessageSerializer
+    
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         doctormessage = serializer.save()
+        
         # Retrieve patient and doctor objects
         doctor_id = serializer.validated_data['doctor'].id
         patient_id = serializer.validated_data['patient'].id
         User = get_user_model()
         doctor = User.objects.get(id=doctor_id)
         patient = User.objects.get(id=patient_id)
-        # Construct message with patient's first name and last name
+        
+        # Construct message with doctor's first name and last name
         doctor_name = f"{doctor.first_name} {doctor.last_name}"
-        message = f"New  Message From Doctor (ID: {doctormessage.id}) Name {doctor_name}. Please review."
-        DoctorPatientMessageNotification.objects.create(recipient=patient, doctor_id=doctor_id, message=message)
+        message_without_id = f"New Message From Doctor {doctor_name}"
+        message_with_id = f"{message_without_id} (ID: {doctormessage.id})"
+        
+        # Create DoctorPatientMessageNotification without ID
+        DoctorPatientMessageNotification.objects.create(recipient=patient, doctor_id=doctor_id, message=message_with_id)
+        
         sender_email = "fetamasr@gmail.com"
         recipient_email = patient.email
         try:
             send_email_with_retry(
                 'New Message Notification From Doctor',
-                message,
+                message_without_id,  # Send email without ID
                 sender_email,
                 [recipient_email],
                 retries=3,
@@ -497,11 +586,13 @@ class DoctorPatientMessageViewSet(ModelViewSet):
             )
         except Exception as e:
             logger.error(f"Failed to send email notification after multiple attempts: {e}")
+        
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 class SpecialistDoctorResponseViewSet(ModelViewSet):
     queryset = SpecialistDoctorResponse.objects.all()
-    serializer_class=SpecialistDoctorResponseSerializer
+    serializer_class = SpecialistDoctorResponseSerializer
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -512,15 +603,22 @@ class SpecialistDoctorResponseViewSet(ModelViewSet):
         doctor = User.objects.get(id=doctor_id)
         specialist = User.objects.get(id=specialist_id)
         specialist_name = f"{specialist.first_name} {specialist.last_name}"
-        message = f"New Response Message From Specialist (ID: {specialistresponse.id}) Name {specialist_name}. Please review."
-        SpecialistDoctorNotification.objects.create(recipient=doctor, specialist_id=specialist_id, message=message)
+        
+        # Construct the message without including the ID for email
+        message_without_id = f"New Response Message From Specialist {specialist_name}"
+        # Construct the full message including the ID for the database
+        message_with_id = f"{message_without_id} (ID: {specialistresponse.id})"
+        
+        # Create SpecialistDoctorNotification without ID
+        SpecialistDoctorNotification.objects.create(recipient=doctor, specialist_id=specialist_id, message=message_with_id)
+        
         sender_email = "fetamasr@gmail.com"
         recipient_email = doctor.email
         print(doctor.email)
         try:
             send_email_with_retry(
                 'New Message Notification From Specialist',
-                message,
+                message_without_id,  # Send email without ID
                 sender_email,
                 [recipient_email],
                 retries=3,
@@ -528,31 +626,40 @@ class SpecialistDoctorResponseViewSet(ModelViewSet):
             )
         except Exception as e:
             logger.error(f"Failed to send email notification after multiple attempts: {e}")
+        
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     
 class SpecialistDoctorRecommendationViewSet(ModelViewSet):
     queryset = SpecialistDoctorRecommendation.objects.all()
     serializer_class=SpecialistDoctorRecommendationSerializer
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         specialistrecommendation = serializer.save()
         doctor_id = serializer.validated_data['doctor'].id
+        patient_id = serializer.validated_data['patient'].id
         specialist_id = serializer.validated_data['specialist'].id
         User = get_user_model()
         doctor = User.objects.get(id=doctor_id)
+        patient = User.objects.get(id=patient_id)
         specialist = User.objects.get(id=specialist_id)
         specialist_name = f"{specialist.first_name} {specialist.last_name}"
-        message = f"New Recommendation Message From Specialist (ID: {specialistrecommendation.id}) Name {specialist_name}. Please review."
-        SpecialistDoctorNotification.objects.create(recipient=doctor, specialist_id=specialist_id, message=message)
+        # Construct the message without including the ID for email
+        message_without_id = f"New Recommendation Message From Specialist Name {specialist_name} for Patient {patient.first_name} {patient.last_name}"
+        # Construct the full message including the ID for the database
+        message_with_id = f"{message_without_id} (ID: {specialistrecommendation.id})"
+        # Create SpecialistDoctorNotification without ID
+        SpecialistDoctorNotification.objects.create(recipient=doctor, specialist_id=specialist_id, message=message_with_id)
         sender_email = "fetamasr@gmail.com"
         recipient_email = doctor.email
         print(doctor.email)
         try:
             send_email_with_retry(
                 'New Message Notification From Specialist',
-                message,
+                message_without_id,  # Send email without ID
                 sender_email,
                 [recipient_email],
                 retries=3,
@@ -562,3 +669,97 @@ class SpecialistDoctorRecommendationViewSet(ModelViewSet):
             logger.error(f"Failed to send email notification after multiple attempts: {e}")
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class SegmentedImagePredictionTotalViewSet(ModelViewSet):
+    queryset = SegmentedImagePredictionTotal.objects.all()
+    serializer_class = SegmentedImagePredictionTotalSerializer
+    parser_classes = [MultiPartParser, FormParser]
+    def create(self, request):
+        serializer = SegmentedImagePredictionTotalSerializer(data=request.data)
+        if serializer.is_valid():
+            image = serializer.validated_data['image']
+            fss = FileSystemStorage()
+            filename = fss.save(image.name, image)
+            file_url = fss.url(filename)
+            file_path = os.path.join(settings.MEDIA_ROOT, filename)
+
+            try:
+                # Load segmentation model
+                segmentation_model_path = os.path.join(os.getcwd(), 'model_best_checkpoint.h5')
+                with custom_object_scope({'bce_dice_loss': bce_dice_loss, 'iou_metric': iou_metric}):
+                    segmentation_model = load_model(segmentation_model_path)
+
+                # Load classification model
+                classification_model_path = os.path.join(os.getcwd(), 'modelres50.h5')
+                classification_model = load_model(classification_model_path)
+
+                # Segmentation
+                input_image_seg = self.preprocess_image_segmentation(file_path)
+                output_image = segmentation_model.predict(input_image_seg)
+                output_path = os.path.join(settings.MEDIA_ROOT, 'segmentation_results', 'segmented_' + filename)
+                self.save_output_image(output_image, output_path)
+
+                # Classification
+                classification_result = self.model_predict(file_path, classification_model)
+                class_names = ['Glioma', 'Meningioma', 'Pituitary', 'No Tumour']
+                predicted_class = class_names[classification_result[0]]
+
+                # Save prediction to the database
+                segmented_image_prediction = SegmentedImagePredictionTotal(
+                    image=image, segmentation_result=output_path, classification_result=predicted_class
+                )
+                segmented_image_prediction.save()
+
+                # Return the response
+                response_data = {
+                    'id': segmented_image_prediction.id,
+                    'segmentation_result_url': segmented_image_prediction.segmentation_result.url,
+                    'classification_result': predicted_class,
+                    'file_url': file_url
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
+            
+            except Exception as e:
+                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def preprocess_image_segmentation(self, image_path):
+        image = Image.open(image_path)
+        image = image.resize((128, 128))
+        image = image.convert('L')
+        input_image = np.array(image) / 255.0
+        input_image = input_image.reshape(1, 128, 128, 1)
+        return input_image
+
+    def preprocess_image_classification(self, image_path):
+        img = Image.open(image_path)
+        img = img.resize((200, 200))
+        img = img.convert('RGB')
+        img = np.array(img) / 255.0
+        img = np.expand_dims(img, axis=0)
+        return img
+
+    def model_predict(self, img_path, model):
+        img = self.preprocess_image_classification(img_path)
+        preds = model.predict(img)
+        pred = np.argmax(preds, axis=1)
+        return pred
+
+    def save_output_image(self, output_image, output_path):
+        output_image = np.squeeze(output_image)
+        output_image = (output_image * 255).astype(np.uint8)
+        if len(output_image.shape) == 2:
+            output_image = Image.fromarray(output_image, mode='L')
+        elif len(output_image.shape) == 3:
+            if output_image.shape[2] == 1:
+                output_image = Image.fromarray(output_image[:, :, 0], mode='L')
+            elif output_image.shape[2] == 3:
+                output_image = Image.fromarray(output_image, mode='RGB')
+            else:
+                raise ValueError(f"Unexpected number of channels: {output_image.shape[2]}")
+        else:
+            raise ValueError(f"Unexpected array shape: {output_image.shape}")
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        output_image.save(output_path)

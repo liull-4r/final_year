@@ -48,7 +48,7 @@ function Header() {
               fontWeight: "600",
               marginLeft: "10px",
             }}
-            to="/"
+            to="/doctors"
           >
             TUMOR TRACK
           </Link>
@@ -57,7 +57,7 @@ function Header() {
         <nav id="navbar" className={navbarClassName}>
           <ul className="header">
             <IoCloseSharp onClick={handleShow} className="mobile-nav-toggle" />
-            <li className="link">
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -65,7 +65,7 @@ function Header() {
               >
                 About Us
               </Link>
-            </li>
+            </li> */}
             <li className="link">
               <Link
                 onClick={handleLinkClick}
@@ -103,7 +103,7 @@ function Header() {
                 Doctors
               </Link>
             </li>
-            <li className="link">
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -111,7 +111,7 @@ function Header() {
               >
                 Service
               </Link>
-            </li>
+            </li> */}
 
             {/* <li className="link">
               <Link
@@ -142,7 +142,7 @@ function Header() {
               </Link>
             </li> */}
 
-            <li className="link">
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -150,7 +150,7 @@ function Header() {
               >
                 Contact
               </Link>
-            </li>
+            </li> */}
             {isLogged ? (
               <li>
                 <Link
@@ -158,7 +158,14 @@ function Header() {
                   className="nav-link scrollto"
                   to="/profile"
                 >
-                  <button className="btn btn-primary">Profile</button>
+                  <button
+                    style={{
+                      backgroundColor: "#3368C6",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    Profile
+                  </button>
                 </Link>
               </li>
             ) : (
@@ -182,7 +189,14 @@ function Header() {
                   className="nav-link scrollto"
                   to="/"
                 >
-                  <button className="btn btn-primary">Logout</button>
+                  <button
+                    style={{
+                      backgroundColor: "##3368C6",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    Logout
+                  </button>
                 </Link>
               </li>
             ) : (
@@ -192,7 +206,14 @@ function Header() {
                   className="nav-link scrollto"
                   to="/login"
                 >
-                  <button className="btn btn-primary">Login</button>
+                  <button
+                    style={{
+                      backgroundColor: "#3368C6",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    Login
+                  </button>
                 </Link>
               </li>
             )}

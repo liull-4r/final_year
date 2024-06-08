@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Appointemet.css";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Correct import statement
+
 const SpecialistAppointementList = () => {
   const Token = localStorage.getItem("Token");
   const user = Token ? jwtDecode(Token) : null;
@@ -23,7 +24,8 @@ const SpecialistAppointementList = () => {
     };
 
     fetchAppointments();
-  }, []);
+  }, [user?.user_id]); // Add user?.user_id as dependency
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {

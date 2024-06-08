@@ -12,18 +12,24 @@ function AllDoctorUpload() {
         justifyContent: "center",
       }}
     >
-      <button style={{ marginTop: "20px", marginBottom: "20px" }}>
+      <button
+        style={{
+          marginTop: "20px",
+          marginBottom: "20px",
+          backgroundColor: "#3368c6",
+        }}
+      >
         <li style={{ listStyleType: "none" }} className="link">
           <Link className="nav-link scrollto" to="/radiologistlists">
-            Upload to Radiologist
+            Refer to Radiologist
           </Link>
         </li>
       </button>
 
-      <button>
+      <button style={{ backgroundColor: "#3368c6", padding: "10px 25px" }}>
         <li style={{ listStyleType: "none" }} className="link">
           <Link className="nav-link scrollto" to="/posttospecialistdata">
-            Upload to Specialist
+            Consult to Specialist
           </Link>
         </li>
       </button>

@@ -506,6 +506,7 @@ const RegistrationForm = () => {
           </div>
 
           <input
+            style={{ backgroundColor: "#3368C6" }}
             className="login-button"
             type="submit"
             value={loading ? "Creating Account..." : "Create Account"}

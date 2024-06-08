@@ -46,7 +46,6 @@ const DoctorUpload = () => {
               </h3>
               <p>Phone: {doctor.phone}</p>
               <p>City: {doctor.city}</p>
-              <p>Gender: {doctor.gender}</p>
               <p>Bio: {doctor.bio}</p>
             </div>
             <button

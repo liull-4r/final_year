@@ -119,7 +119,7 @@ const DoctorRadiologistDetail = () => {
 
           <tr>
             <td style={{ border: "1px solid black", padding: "8px" }}>
-              Doctor Diagnosis:
+              Doctor Message:
             </td>
             <td style={{ border: "1px solid black", padding: "8px" }}>
               {appointment.notes}

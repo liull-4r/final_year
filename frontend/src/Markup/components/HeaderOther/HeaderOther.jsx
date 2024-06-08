@@ -51,7 +51,7 @@ function DoctorHeader() {
               fontWeight: "600",
               marginLeft: "10px",
             }}
-            to="/"
+            to="/scan"
           >
             TUMOR TRACK
           </Link>
@@ -61,7 +61,7 @@ function DoctorHeader() {
           <ul className="header">
             <IoCloseSharp onClick={handleShow} className="mobile-nav-toggle" />
 
-            <li className="link">
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -69,8 +69,8 @@ function DoctorHeader() {
               >
                 About Us
               </Link>
-            </li>
-            <li className="link">
+            </li> */}
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -78,7 +78,7 @@ function DoctorHeader() {
               >
                 Service
               </Link>
-            </li>
+            </li> */}
 
             <li className="link">
               <Link
@@ -140,7 +140,7 @@ function DoctorHeader() {
               </Link>
             </li>
 
-            <li className="link">
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -148,7 +148,7 @@ function DoctorHeader() {
               >
                 Contact
               </Link>
-            </li>
+            </li> */}
             {isLogged ? (
               <li>
                 <Link
@@ -156,18 +156,32 @@ function DoctorHeader() {
                   className="nav-link scrollto"
                   to="/profile"
                 >
-                  <button className="btn btn-primary">Profile</button>
+                  <button
+                    style={{
+                      backgroundColor: "#3368C6",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    Profile
+                  </button>
                 </Link>
               </li>
             ) : (
               <li>
-                <Link
+                {/* <Link
                   onClick={handleLinkClick}
                   className="nav-link scrollto"
                   to="/register"
                 >
-                  <button className="btn btn-primary">Sign Up</button>
-                </Link>
+                  <button
+                    style={{
+                      backgroundColor: "#3368C6",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    Sign Up
+                  </button>
+                </Link> */}
               </li>
             )}
             {isLogged ? (
@@ -180,18 +194,25 @@ function DoctorHeader() {
                   className="nav-link scrollto"
                   to="/"
                 >
-                  <button className="btn btn-primary">Logout</button>
+                  <button
+                    style={{
+                      backgroundColor: "#3368C6",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    Logout
+                  </button>
                 </Link>
               </li>
             ) : (
               <li>
-                <Link
+                {/* <Link
                   onClick={handleLinkClick}
                   className="nav-link scrollto"
                   to="/login"
                 >
-                  <button className="btn btn-primary">Login</button>
-                </Link>
+                  <button style={{ backgroundColor: "#3368C6" }}>Login</button>
+                </Link> */}
               </li>
             )}
           </ul>

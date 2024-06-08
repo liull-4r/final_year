@@ -127,6 +127,25 @@ const DoctorSpecialistDetail = () => {
           </tr>
           <tr>
             <td style={{ border: "1px solid black", padding: "8px" }}>
+              Patient MRI Scan Image:
+            </td>
+            <td style={{ border: "1px solid black", padding: "8px" }}>
+              {appointment.patient_model_image ? (
+                <a
+                  href={`http://localhost:9000${appointment.patient_model_image}`}
+                  target="_blank"
+                  download={true}
+                >
+                  Patient MRI Scan Image
+                </a>
+              ) : (
+                "No Image Available"
+              )}
+            </td>
+          </tr>
+
+          <tr>
+            <td style={{ border: "1px solid black", padding: "8px" }}>
               Radiologist Recommendation:
             </td>
             <td style={{ border: "1px solid black", padding: "8px" }}>

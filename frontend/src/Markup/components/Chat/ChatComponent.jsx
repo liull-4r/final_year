@@ -42,14 +42,14 @@ const ChatComponent = () => {
 
   return (
     <div className="chat-container" style={{ marginTop: "100px" }}>
-      <h1>Chat With ChatGPT</h1>
+      <h1>Ask ChatGPT</h1>
       <div className="messages-container">
         {messages.map((message, index) => (
           <div
             key={index}
             className={`message ${message.role}`}
             style={{
-              backgroundColor: message.role === "user" ? "blue" : "green",
+              backgroundColor: message.role === "user" ? "blue" : "",
               color: message.role === "user" ? "white" : "black",
             }}
           >

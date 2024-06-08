@@ -1,13 +1,11 @@
-import AboutPart from "../components/AboutPart/AboutPart"
-
+import AboutPartTwo from "../components/AboutPart/AboutPartTwo";
 
 function About() {
   return (
-      <>
-      <AboutPart/>
-      
-      </>
-  )
+    <>
+      <AboutPartTwo />
+    </>
+  );
 }
 
-export default About
+export default About;

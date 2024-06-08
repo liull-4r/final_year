@@ -75,20 +75,20 @@ const RadiologistList = () => {
                 className="doctor-image"
               />
               <div>
-                <h3>
+                <p>
                   {radiologist.first_name} {radiologist.last_name}
-                </h3>
+                </p>
                 <p>Phone: {radiologist.phone}</p>
                 <p>City: {radiologist.city}</p>
-                <p>Gender: {radiologist.gender}</p>
                 Bio:{renderBio(radiologist.bio, radiologist.id)}
               </div>
               <br />
               <button
+                style={{ backgroundColor: "#3368c6" }}
                 className="appointment-button"
                 onClick={() => handlePostToRadiologist(radiologist.user_id)}
               >
-                Post To Radiologist
+                Refer To Radiologist
               </button>
             </div>
           ))}

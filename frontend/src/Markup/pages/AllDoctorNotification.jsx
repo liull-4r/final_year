@@ -12,7 +12,14 @@ function AllDoctorNotification() {
         justifyContent: "center",
       }}
     >
-      <button style={{ marginTop: "20px", marginBottom: "20px" }}>
+      <button
+        style={{
+          marginTop: "20px",
+          marginBottom: "20px",
+          backgroundColor: "#3368C6",
+          padding: "10px 25px",
+        }}
+      >
         <li style={{ listStyleType: "none" }} className="link">
           <Link
             className="nav-link scrollto"
@@ -23,7 +30,12 @@ function AllDoctorNotification() {
         </li>
       </button>
 
-      <button>
+      <button
+        style={{
+          backgroundColor: "#3368C6",
+          // borderRadius: "20px",
+        }}
+      >
         <li style={{ listStyleType: "none" }} className="link">
           <Link
             className="nav-link scrollto"

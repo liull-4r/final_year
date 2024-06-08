@@ -47,7 +47,7 @@ function ReceptionistHeader() {
               fontWeight: "600",
               marginLeft: "10px",
             }}
-            to="/"
+            to="/add-patient"
           >
             TUMOR TRACK
           </Link>
@@ -57,7 +57,7 @@ function ReceptionistHeader() {
           <ul className="header">
             <IoCloseSharp onClick={handleShow} className="mobile-nav-toggle" />
 
-            <li className="link">
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -65,8 +65,8 @@ function ReceptionistHeader() {
               >
                 About Us
               </Link>
-            </li>
-            <li className="link">
+            </li> */}
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -74,7 +74,7 @@ function ReceptionistHeader() {
               >
                 Service
               </Link>
-            </li>
+            </li> */}
             <li className="link">
               <Link
                 onClick={handleLinkClick}
@@ -113,7 +113,7 @@ function ReceptionistHeader() {
               </Link>
             </li> */}
 
-            <li className="link">
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -121,7 +121,7 @@ function ReceptionistHeader() {
               >
                 Contact
               </Link>
-            </li>
+            </li> */}
             {isLogged ? (
               <li>
                 <Link
@@ -129,7 +129,11 @@ function ReceptionistHeader() {
                   className="nav-link scrollto"
                   to="/profile"
                 >
-                  <button className="btn btn-primary">Profile</button>
+                  <button
+                    style={{ backgroundColor: "#3368c6", borderRadius: "15px" }}
+                  >
+                    Profile
+                  </button>
                 </Link>
               </li>
             ) : (
@@ -153,7 +157,11 @@ function ReceptionistHeader() {
                   className="nav-link scrollto"
                   to="/"
                 >
-                  <button className="btn btn-primary">Logout</button>
+                  <button
+                    style={{ backgroundColor: "#3368c6", borderRadius: "15px" }}
+                  >
+                    Logout
+                  </button>
                 </Link>
               </li>
             ) : (

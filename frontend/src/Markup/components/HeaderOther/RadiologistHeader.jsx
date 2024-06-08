@@ -47,7 +47,7 @@ function RadiologistHeader() {
               fontWeight: "600",
               marginLeft: "10px",
             }}
-            to="/"
+            to="/scan"
           >
             TUMOR TRACK
           </Link>
@@ -57,7 +57,7 @@ function RadiologistHeader() {
           <ul className="header">
             <IoCloseSharp onClick={handleShow} className="mobile-nav-toggle" />
 
-            <li className="link">
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -65,8 +65,8 @@ function RadiologistHeader() {
               >
                 About Us
               </Link>
-            </li>
-            <li className="link">
+            </li> */}
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -74,7 +74,7 @@ function RadiologistHeader() {
               >
                 Service
               </Link>
-            </li>
+            </li> */}
             <li className="link">
               <Link
                 onClick={handleLinkClick}
@@ -90,7 +90,7 @@ function RadiologistHeader() {
                 className="nav-link scrollto"
                 to="/doctorradiologistnotification"
               >
-                Radiologist Notifications
+                Notifications
               </Link>
             </li>
             <li className="link">
@@ -109,11 +109,11 @@ function RadiologistHeader() {
                 className="nav-link scrollto"
                 to="/resources"
               >
-                Radio Resources
+                 Resources
               </Link>
             </li>
 
-            <li className="link">
+            {/* <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
@@ -121,7 +121,7 @@ function RadiologistHeader() {
               >
                 Contact
               </Link>
-            </li>
+            </li> */}
             {isLogged ? (
               <li>
                 <Link
@@ -129,18 +129,26 @@ function RadiologistHeader() {
                   className="nav-link scrollto"
                   to="/profile"
                 >
-                  <button className="btn btn-primary">Profile</button>
+                  <button
+                    style={{ backgroundColor: "#3368c6", borderRadius: "15px" }}
+                  >
+                    Profile
+                  </button>
                 </Link>
               </li>
             ) : (
               <li>
-                <Link
+                {/* <Link
                   onClick={handleLinkClick}
                   className="nav-link scrollto"
                   to="/register"
                 >
-                  <button className="btn btn-primary">Sign Up</button>
-                </Link>
+                  <button
+                    style={{ backgroundColor: "#3368c6", borderRadius: "15px" }}
+                  >
+                    Sign Up
+                  </button>
+                </Link> */}
               </li>
             )}
             {isLogged ? (
@@ -153,18 +161,22 @@ function RadiologistHeader() {
                   className="nav-link scrollto"
                   to="/"
                 >
-                  <button className="btn btn-primary">Logout</button>
+                  <button
+                    style={{ backgroundColor: "#3368c6", borderRadius: "15px" }}
+                  >
+                    Logout
+                  </button>
                 </Link>
               </li>
             ) : (
               <li>
-                <Link
+                {/* <Link
                   onClick={handleLinkClick}
                   className="nav-link scrollto"
                   to="/login"
                 >
-                  <button className="btn btn-primary">Login</button>
-                </Link>
+                  <button style={{ backgroundColor: "#3368c6",borderRadius:"15px" }}>Login</button>
+                </Link> */}
               </li>
             )}
           </ul>

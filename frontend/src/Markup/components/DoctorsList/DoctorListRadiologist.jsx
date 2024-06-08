@@ -74,12 +74,12 @@ const DoctorListRadiologist = () => {
                 </h3>
                 <p>Phone: {doctor.phone}</p>
                 <p>City: {doctor.city}</p>
-                <p>Gender: {doctor.gender}</p>
                 Bio:{renderBio(doctor.bio, doctor.id)}
               </div>
               <br />
               {/* <DoctorAvailable doctorId={doctor.id} /> */}
               <button
+                style={{ backgroundColor: "#3368c6" }}
                 className="appointment-button"
                 onClick={() => handlePostToDoctor(doctor.user_id)}
               >

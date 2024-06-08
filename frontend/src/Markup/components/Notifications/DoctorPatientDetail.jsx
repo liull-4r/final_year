@@ -27,7 +27,7 @@ const DoctorPatientDetail = () => {
 
   return (
     <div style={{ marginTop: "100px", textAlign: "center" }}>
-      <h2>Information About Doctor Response Detail</h2>
+      <h2>Information About Doctor Message Detail</h2>
       {/* <table
         style={{
           margin: "auto",

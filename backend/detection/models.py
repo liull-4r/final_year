@@ -169,3 +169,15 @@ class MedicalRecord(models.Model):
     doctor_notes = models.TextField(blank=True, null=True)
     def __str__(self):
         return f"{self.patient_name}"
+    
+
+
+
+
+
+class SegmentedImagePredictionTotal(models.Model):
+    image = models.ImageField(upload_to='mriscan/')
+    segmentation_result = models.ImageField(upload_to='segmentation_results/', blank=True, null=True)
+    classification_result = models.CharField(max_length=100, blank=True, null=True)
+    def __str__(self):
+        return f"Prediction for {self.image.name}"

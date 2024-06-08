@@ -27,6 +27,7 @@ const ResetPasswordConfirm = lazy(() =>
 );
 
 import { useUserRole } from "./context/AuthContext";
+import { useIsLogged } from "./context/AuthContext";
 import UnAuthorized from "./Markup/pages/UnAuthorized";
 import Scan from "./Markup/pages/Scan";
 import EducationalResource from "./Markup/pages/RegisterForm";
@@ -83,10 +84,16 @@ import AllDoctorNotification from "./Markup/pages/AllDoctorNotification";
 import AllDoctorRecord from "./Markup/pages/AllDoctorRecord";
 import AllDoctorUpload from "./Markup/pages/AllDoctorUpload";
 import AllSpecialistResponse from "./Markup/pages/AllSpecialistResponse";
+import DoctorSpecialistRequestDetail from "./Markup/components/Notifications/DoctorSpecialistRequestDetail";
+import LoginTest from "./Markup/components/LoginForm/LoginTest";
+import HeaderFirst from "./Markup/components/Header/HeaderFirst";
+import ForOFor from "./Markup/pages/ForOFor";
 
 function App() {
+  const { isLogged } = useIsLogged();
   const { userRole } = useUserRole();
   console.log(userRole);
+  console.log(isLogged);
 
   return (
     <div>
@@ -97,12 +104,18 @@ function App() {
           path="/"
           element={
             <>
-              {userRole === "Doctor" && <DoctorHeader />}
-              {userRole === "Radiologist" && <RadiologistHeader />}
-              {userRole === "Specialist" && <SpecialistHeader />}
-              {userRole !== "Doctor" &&
-                userRole !== "Radiologist" &&
-                userRole !== "Specialist" && <Header />}
+              {!isLogged ? (
+                <HeaderFirst />
+              ) : (
+                <>
+                  {userRole === "Doctor" && <DoctorHeader />}
+                  {userRole === "Radiologist" && <RadiologistHeader />}
+                  {userRole === "Specialist" && <SpecialistHeader />}
+                  {userRole !== "Doctor" &&
+                    userRole !== "Radiologist" &&
+                    userRole !== "Specialist" && <Header />}
+                </>
+              )}
               <Home />
               <Footer />
             </>
@@ -120,7 +133,8 @@ function App() {
                 userRole !== "Radiologist" &&
                 userRole !== "Receptionist" &&
                 userRole !== "Specialist" && <Header />}
-              <Login />
+              {!isLogged && <HeaderFirst />}
+              <LoginTest />
               <Footer />
             </>
           }
@@ -158,6 +172,7 @@ function App() {
                 userRole !== "Radiologist" &&
                 userRole !== "Receptionist" &&
                 userRole !== "Specialist" && <Header />}
+              {!isLogged && <HeaderFirst />}
               <About />
               <Footer />
             </>
@@ -533,6 +548,7 @@ function App() {
                 userRole !== "Radiologist" &&
                 userRole !== "Receptionist" &&
                 userRole !== "Specialist" && <Header />}
+              {!isLogged && <HeaderFirst />}
               <Contact />
               <Footer />
             </>
@@ -638,6 +654,7 @@ function App() {
                 userRole !== "Radiologist" &&
                 userRole !== "Receptionist" &&
                 userRole !== "Specialist" && <Header />}
+              {!isLogged && <HeaderFirst />}
               <ServicesPage />
               <Footer />
             </>
@@ -735,6 +752,18 @@ function App() {
               <SpecialistHeader />
               <PrivateAuthRoute roles={["Specialist"]}>
                 <DoctorSpecialistDetail />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/doctorspecialistrequestdetail/:id"
+          element={
+            <>
+              <SpecialistHeader />
+              <PrivateAuthRoute roles={["Specialist"]}>
+                <DoctorSpecialistRequestDetail />
               </PrivateAuthRoute>
               <Footer />
             </>
@@ -892,6 +921,16 @@ function App() {
               <PrivateAuthRoute roles={["Doctor"]}>
                 <SearchForUpdate />
               </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/*"
+          element={
+            <>
+              <HeaderFirst />
+              <ForOFor />
               <Footer />
             </>
           }

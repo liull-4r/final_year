@@ -73,7 +73,6 @@ const SpecialistDoctorForRecommendation = () => {
                 </h3>
                 <p>Phone: {doctor.phone}</p>
                 <p>City: {doctor.city}</p>
-                <p>Gender: {doctor.gender}</p>
                 Bio:{renderBio(doctor.bio, doctor.id)}
               </div>
               <br />

@@ -75,12 +75,11 @@ const SpecialistList = () => {
                 className="doctor-image"
               />
               <div>
-                <h3>
+                <p>
                   {specialist.first_name} {specialist.last_name}
-                </h3>
+                </p>
                 <p>Phone: {specialist.phone}</p>
                 <p>City: {specialist.city}</p>
-                <p>Gender: {specialist.gender}</p>
                 Bio:{renderBio(specialist.bio, specialist.id)}
               </div>
               <br />

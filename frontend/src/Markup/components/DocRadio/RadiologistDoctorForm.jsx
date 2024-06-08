@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Import jwtDecode
 import "./RadiologistDoctorForm.css";
 
 const RadiologistDoctorForm = () => {
   const location = useLocation();
   const { doctorIdK } = location.state;
   const Token = localStorage.getItem("Token");
-  const user = Token ? jwtDecode(Token) : null; // Check if Token is not null
+  const user = Token ? jwtDecode(Token) : null;
   const radiologistId = user?.user_id;
   const [patients, setPatients] = useState([]);
   const [formData, setFormData] = useState({
@@ -21,14 +21,27 @@ const RadiologistDoctorForm = () => {
     image: null,
   });
 
-  // Fetch patient data from the API
   useEffect(() => {
     const fetchPatients = async () => {
       try {
         const response = await axios.get(
           `http://localhost:9000/detection/getpatientsfromradiologist/?radiologist_id=${radiologistId}`
         );
-        setPatients(response.data);
+
+        // Create a Set to keep track of unique patient IDs
+        const uniquePatientsSet = new Set();
+
+        // Filter patients to only include unique ones
+        const uniquePatients = response.data.filter((patient) => {
+          if (uniquePatientsSet.has(patient.patient_id)) {
+            return false;
+          } else {
+            uniquePatientsSet.add(patient.patient_id);
+            return true;
+          }
+        });
+
+        setPatients(uniquePatients);
       } catch (error) {
         console.error("Error fetching patients:", error);
         toast.error("Failed to fetch patients.");
@@ -36,7 +49,7 @@ const RadiologistDoctorForm = () => {
     };
 
     fetchPatients();
-  }, []);
+  }, [radiologistId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,8 +76,6 @@ const RadiologistDoctorForm = () => {
     data.append("prediction", formData.prediction);
     data.append("recommendation", formData.recommendation);
     data.append("image", formData.image);
-
-    console.log(data);
 
     try {
       const response = await axios.post(

@@ -45,7 +45,7 @@ const PatientAppointmentList = () => {
 
   return (
     <div style={{ marginTop: "100px", textAlign: "center" }}>
-      <h2>Appointments List</h2>
+      <h2>Appointments</h2>
       {isLoading ? (
         <div>Loading...</div>
       ) : (
@@ -137,7 +137,7 @@ const PatientAppointmentList = () => {
                           {formatTime(appointment.appointment_datetime)}
                         </td>
                       </tr>
-                     
+
                       <tr>
                         <td
                           style={{ border: "1px solid black", padding: "8px" }}

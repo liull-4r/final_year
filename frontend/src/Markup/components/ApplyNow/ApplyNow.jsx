@@ -22,10 +22,11 @@ function ApplyNow() {
             variant="h3"
             sx={{
               margin: 2,
-              fontSize: isDesktop ? "2rem" : "1rem", // Adjust font size based on screen size
+              fontSize: isDesktop ? "2rem" : "1rem",
+              color: "black", // Adjust font size based on screen size
             }}
           >
-            Scan With Confidence
+            Features
           </Typography>
         </div>
       </div>
