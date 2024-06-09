@@ -22,30 +22,15 @@ const DoctorRecommendationDetail = () => {
   }, [id]);
 
   if (!appointment) {
-    return <div>Loading...</div>;
+    return (
+      <div style={{ marginTop: "100px", textAlign: "center" }}>Loading...</div>
+    );
   }
 
   return (
     <div style={{ marginTop: "100px", textAlign: "center" }}>
       <h2>Specialist Recommendation Detail</h2>
-      <table
-        style={{
-          margin: "auto",
-          borderCollapse: "collapse",
-          border: "2px solid black",
-        }}
-      >
-        <tbody>
-          <tr>
-            <td style={{ border: "1px solid black", padding: "8px" }}>
-              Recommendation
-            </td>
-            <td style={{ border: "1px solid black", padding: "8px" }}>
-              {appointment.recommendation}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <p>{appointment.recommendation}</p>
     </div>
   );
 };

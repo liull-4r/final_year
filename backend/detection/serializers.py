@@ -39,9 +39,12 @@ class SpecialistDoctorResponseSerializer(serializers.ModelSerializer):
 class MedicalRecordSerializer(serializers.ModelSerializer):
     patient_first_name = serializers.SerializerMethodField()
     patient_last_name = serializers.SerializerMethodField()
+    patient_username = serializers.SerializerMethodField()
+    patient_city = serializers.SerializerMethodField()
+    patient_phone = serializers.SerializerMethodField()
     class Meta:
         model=MedicalRecord
-        fields=['id','doctor','patient','patient_first_name','patient_last_name','weight','systolic_blood_pressure','diastolic_blood_pressure','blood_sugar_level','heart_rate','cholesterol_level','doctor_notes']
+        fields=['id','doctor','patient','patient_first_name','patient_last_name','patient_city','patient_phone','patient_username','weight','systolic_blood_pressure','diastolic_blood_pressure','blood_sugar_level','heart_rate','cholesterol_level','doctor_notes']
     def get_patient_first_name(self, obj):
         # Access the patient object from the appointment instance and get the first name
         patient = obj.patient
@@ -52,6 +55,22 @@ class MedicalRecordSerializer(serializers.ModelSerializer):
         patient = obj.patient
         if patient:
             return patient.last_name
+        return None
+    def get_patient_username(self, obj):
+        patient = obj.patient
+        if patient:
+            return patient.username
+        return None
+    def get_patient_city(self, obj):
+        patient = obj.patient
+        if patient and hasattr(patient, 'customer'):
+            return patient.customer.city
+        return None
+
+    def get_patient_phone(self, obj):
+        patient = obj.patient
+        if patient and hasattr(patient, 'customer'):
+            return patient.customer.phone
         return None
     
 class CustomCustomerSerializer(serializers.ModelSerializer):

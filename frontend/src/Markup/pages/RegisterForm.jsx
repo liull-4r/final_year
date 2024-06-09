@@ -16,7 +16,7 @@ const EducationalResource = () => {
         </li>
         <li style={styles.linkItem}>
           <Link to="/chat" style={styles.link}>
-            Ask Chat Gpt
+            Brain Tumor Help Bot
           </Link>
         </li>
       </ul>

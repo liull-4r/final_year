@@ -17,6 +17,7 @@ function AllDoctorUpload() {
           marginTop: "20px",
           marginBottom: "20px",
           backgroundColor: "#3368c6",
+          padding: "10px 30px",
         }}
       >
         <li style={{ listStyleType: "none" }} className="link">

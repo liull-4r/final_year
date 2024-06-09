@@ -23,7 +23,7 @@ const Scan = () => {
   };
 
   const handleUpload = async () => {
-    const toastId = toast.loading("Posting data Please Wait...");
+    const toastId = toast.loading("Uploading MRI scan Image Please Wait...");
     if (file) {
       const formData = new FormData();
       formData.append("image", file);

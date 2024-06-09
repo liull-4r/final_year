@@ -7,34 +7,66 @@ const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
   const [generatingAnswer, setGeneratingAnswer] = useState(false);
 
+  const brainTumorKeywords = [
+    "brain tumor",
+    "glioma",
+    "meningioma",
+    "astrocytoma",
+    "tumor",
+    "mass",
+    "headache",
+    "seizure",
+    "vision",
+    "balance",
+    "cognition",
+    "memory",
+    "treatment",
+    "surgery",
+    "radiation",
+    "chemotherapy",
+  ];
+
   async function generateAnswer(e) {
     setGeneratingAnswer(true);
     setQuestion("");
     e.preventDefault();
-    const newQuestion = { role: "user", content: question };
-    setMessages((prevMessages) => [...prevMessages, newQuestion]);
 
-    try {
-      const response = await axios({
-        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyBVLZjVDMxzOG3LoD_xPt3ZzyaIXTZu89Y`,
-        method: "post",
-        data: {
-          contents: [{ parts: [{ text: question }] }],
-        },
-      });
+    const isBrainTumorRelated = brainTumorKeywords.some((keyword) =>
+      question.toLowerCase().includes(keyword)
+    );
 
-      const newAnswer = {
+    if (isBrainTumorRelated) {
+      const newQuestion = { role: "user", content: question };
+      setMessages((prevMessages) => [...prevMessages, newQuestion]);
+      try {
+        const response = await axios({
+          url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyBVLZjVDMxzOG3LoD_xPt3ZzyaIXTZu89Y`,
+          method: "post",
+          data: {
+            contents: [{ parts: [{ text: question }] }],
+          },
+        });
+
+        const newAnswer = {
+          role: "assistant",
+          content: response.data.candidates[0].content.parts[0].text,
+        };
+        setMessages((prevMessages) => [...prevMessages, newAnswer]);
+      } catch (error) {
+        console.log(error);
+        const errorMessage = {
+          role: "assistant",
+          content: "Sorry - Something went wrong. Please try again!",
+        };
+        setMessages((prevMessages) => [...prevMessages, errorMessage]);
+      }
+    } else {
+      // Handle non-brain tumor related questions
+      const offTopicMessage = {
         role: "assistant",
-        content: response.data.candidates[0].content.parts[0].text,
+        content: "This chat is specifically for brain tumor-related questions.",
       };
-      setMessages((prevMessages) => [...prevMessages, newAnswer]);
-    } catch (error) {
-      console.log(error);
-      const errorMessage = {
-        role: "assistant",
-        content: "Sorry - Something went wrong. Please try again!",
-      };
-      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+      setMessages((prevMessages) => [...prevMessages, offTopicMessage]);
     }
 
     setGeneratingAnswer(false);
@@ -42,7 +74,7 @@ const ChatComponent = () => {
 
   return (
     <div className="chat-container" style={{ marginTop: "100px" }}>
-      <h1>Ask ChatGPT</h1>
+      <h1>Brain Tumor Help Bot</h1>
       <div className="messages-container">
         {messages.map((message, index) => (
           <div
@@ -64,7 +96,7 @@ const ChatComponent = () => {
           type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Ask anything"
+          placeholder="Ask a brain tumor question"
           className="input-field"
         />
         <button

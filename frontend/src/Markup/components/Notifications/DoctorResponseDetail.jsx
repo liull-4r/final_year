@@ -28,7 +28,8 @@ const DoctorResponseDetail = () => {
   return (
     <div style={{ marginTop: "100px", textAlign: "center" }}>
       <h2>Information About Specialist Response Detail</h2>
-      <table
+      <p>{appointment.message}</p>
+      {/* <table
         style={{
           margin: "auto",
           borderCollapse: "collapse",
@@ -45,7 +46,7 @@ const DoctorResponseDetail = () => {
             </td>
           </tr>
         </tbody>
-      </table>
+      </table> */}
     </div>
   );
 };

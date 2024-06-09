@@ -34,6 +34,20 @@ function AllDoctorRecord() {
           </Link>
         </li>
       </button>
+      <button
+        style={{
+          marginTop: "20px",
+          marginBottom: "20px",
+          backgroundColor: "#3368c6",
+          padding: "10px 33px",
+        }}
+      >
+        <li style={{ listStyleType: "none" }} className="link">
+          <Link className="nav-link scrollto" to="/patients">
+            My Patients
+          </Link>
+        </li>
+      </button>
     </div>
   );
 }

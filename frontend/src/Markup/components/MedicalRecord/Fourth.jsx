@@ -53,10 +53,6 @@ function SearchForMessage() {
     navigate("/doctorpatientmessage", { state: { customerIDK: customerID } });
   };
 
-  const handleProfileClick = (customerData) => {
-    navigate("/admin/customer-profile", { state: { customerData } });
-  };
-
   return (
     <section>
       <div style={{ marginTop: "100px" }} className="auto-container">
@@ -129,9 +125,7 @@ function SearchForMessage() {
                     <tr key={customer.id}>
                       <td>{customer.username}</td>
                       <td>{customer.first_name}</td>
-                      <td onClick={() => handleProfileClick(customer)}>
-                        {customer.last_name}
-                      </td>
+                      <td>{customer.last_name}</td>
                       <td>{customer.city}</td>
                       <td>{customer.phone}</td>
 

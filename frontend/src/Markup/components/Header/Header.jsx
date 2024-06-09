@@ -191,7 +191,7 @@ function Header() {
                 >
                   <button
                     style={{
-                      backgroundColor: "##3368C6",
+                      backgroundColor: "#3368C6",
                       borderRadius: "20px",
                     }}
                   >

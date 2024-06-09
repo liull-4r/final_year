@@ -18,7 +18,7 @@ import Contact from "./Markup/components/ContactF/Contact";
 const Header = lazy(() => import("./Markup/components/Header/Header"));
 const Footer = lazy(() => import("./Markup/components/Footer/Footer"));
 const Home = lazy(() => import("./Markup/pages/Home"));
-const Login = lazy(() => import("./Markup/pages/Login"));
+// const Login = lazy(() => import("./Markup/pages/Login"));
 const Register = lazy(() => import("./Markup/pages/Register"));
 const Forgot = lazy(() => import("./Markup/pages/Forgot"));
 const About = lazy(() => import("./Markup/pages/About"));
@@ -88,6 +88,7 @@ import DoctorSpecialistRequestDetail from "./Markup/components/Notifications/Doc
 import LoginTest from "./Markup/components/LoginForm/LoginTest";
 import HeaderFirst from "./Markup/components/Header/HeaderFirst";
 import ForOFor from "./Markup/pages/ForOFor";
+import PatientList from "./Markup/components/MedicalRecord/Fifth";
 
 function App() {
   const { isLogged } = useIsLogged();
@@ -920,6 +921,18 @@ function App() {
               <DoctorHeader />
               <PrivateAuthRoute roles={["Doctor"]}>
                 <SearchForUpdate />
+              </PrivateAuthRoute>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/patients"
+          element={
+            <>
+              <DoctorHeader />
+              <PrivateAuthRoute roles={["Doctor"]}>
+                <PatientList />
               </PrivateAuthRoute>
               <Footer />
             </>
