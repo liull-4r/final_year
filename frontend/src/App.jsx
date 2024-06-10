@@ -93,8 +93,7 @@ import PatientList from "./Markup/components/MedicalRecord/Fifth";
 function App() {
   const { isLogged } = useIsLogged();
   const { userRole } = useUserRole();
-  console.log(userRole);
-  console.log(isLogged);
+
 
   return (
     <div>
@@ -155,7 +154,7 @@ function App() {
           path="/forgot"
           element={
             <>
-              <Header />
+              <HeaderFirst />
               <Forgot />
               <Footer />
             </>
@@ -209,7 +208,7 @@ function App() {
           path="/password/reset/confirm/:uid?/:token"
           element={
             <>
-              <Header />
+              <HeaderFirst />
               <ResetPasswordConfirm />
               <Footer />
             </>

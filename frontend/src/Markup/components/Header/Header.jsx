@@ -57,42 +57,26 @@ function Header() {
         <nav id="navbar" className={navbarClassName}>
           <ul className="header">
             <IoCloseSharp onClick={handleShow} className="mobile-nav-toggle" />
-            {/* <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/about"
-              >
-                About Us
-              </Link>
-            </li> */}
-            <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/viewrecommendation"
-              >
-                View Recommendation
-              </Link>
-            </li>
+
             <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
                 to="/doctorpatientnotifications"
               >
-                View Notifications
+                Notifications
               </Link>
             </li>
-            {/* <li className="link">
+
+            <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/doctor"
+                to="/viewrecommendation"
               >
-                Upload MRI
+                Recommendation
               </Link>
-            </li> */}
+            </li>
 
             <li className="link">
               <Link
@@ -103,25 +87,6 @@ function Header() {
                 Doctors
               </Link>
             </li>
-            {/* <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/service"
-              >
-                Service
-              </Link>
-            </li> */}
-
-            {/* <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/doctors"
-              >
-                Make an Appointment
-              </Link>
-            </li> */}
 
             <li className="link">
               <Link
@@ -129,28 +94,10 @@ function Header() {
                 className="nav-link scrollto"
                 to="/schedule"
               >
-                View Schedule
+                Schedule
               </Link>
             </li>
-            {/* <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/appointement-list"
-              >
-                Appointements
-              </Link>
-            </li> */}
 
-            {/* <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/contact"
-              >
-                Contact
-              </Link>
-            </li> */}
             {isLogged ? (
               <li>
                 <Link
@@ -169,15 +116,7 @@ function Header() {
                 </Link>
               </li>
             ) : (
-              <li>
-                {/* <Link
-                  onClick={handleLinkClick}
-                  // className="nav-link scrollto"
-                  to="/register"
-                > */}
-                {/* <button className="btn btn-primary">Sign Up</button> */}
-                {/* </Link> */}
-              </li>
+              <li></li>
             )}
             {isLogged ? (
               <li>

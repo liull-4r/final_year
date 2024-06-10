@@ -139,7 +139,7 @@ const MedicalRecordsFormUpdate = () => {
         </div>
       </div>
       <div className="mb-3">
-        <label>Doctor Diagnosis:</label>
+        <label>Doctor Diagnosis & Treatment Plan:</label>
         <textarea
           className="form-control"
           name="doctor_notes"

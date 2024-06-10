@@ -37,7 +37,7 @@ const RecommendationForm = () => {
           },
         }
       );
-      console.log("Success:", response.data);
+      console.log(response);
       toast.success("Recommendation Posted successful");
       toast.dismiss(toastId);
     } catch (error) {
@@ -61,7 +61,14 @@ const RecommendationForm = () => {
           />
         </div>
 
-        <button type="submit">Submit</button>
+        <button
+          type="submit"
+          style={{
+            backgroundColor: "#3368C6",
+          }}
+        >
+          Submit
+        </button>
       </form>
     </div>
   );

@@ -64,7 +64,7 @@ const DoctorPatient = () => {
         <div style={styles.notificationContainer}>
           {notifications.map((notification) => (
             <div key={notification.id} style={styles.notification}>
-              {notification.message.startsWith("New  Message") ? (
+              {notification.message.startsWith("New Message") ? (
                 <Link
                   to={`/doctorpatientdetail/${extractAppointmentId(
                     notification.message

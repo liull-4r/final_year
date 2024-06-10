@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 import time
 import logging
 import os
+import cv2
 import numpy as np
 from socket import gaierror
 from smtplib import SMTPException
@@ -31,28 +32,6 @@ from .models import SegmentedImagePredictionTotal
 from .serializers import SegmentedImagePredictionTotalSerializer
 from .custom_losses import bce_dice_loss
 from .custom_metrics import iou_metric
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def send_email_with_retry(subject, message, from_email, recipient_list, retries=3, delay=5):
@@ -210,7 +189,8 @@ class DoctorRadiologistViewSet(ModelViewSet):
         doctor_name = f"{doctor.first_name} {doctor.last_name}"
 
         message_without_id = f"New Message From Doctor {doctor_name} for patient {patient_name}"
-        DoctorRadiologistNotification.objects.create(recipient=radiologist, doctor_id=doctor_id, message=message_without_id)
+        message_with_id = f"{message_without_id} (ID: {doctor_radiologist.id})"
+        DoctorRadiologistNotification.objects.create(recipient=radiologist, doctor_id=doctor_id, message=message_with_id)
 
         sender_email = "fetamasr@gmail.com"
         recipient_email = radiologist.email
@@ -247,12 +227,10 @@ class DoctorRadiologistViewSet(ModelViewSet):
 class DoctorSpecialistDataViewSet(ModelViewSet):
     queryset = DoctorSpecialistData.objects.select_related('doctor', 'patient', 'specialist').all()
     serializer_class = DoctorSpecialistDataSerializer
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         doctorspecialistdata = serializer.save()
-
         doctor_id = serializer.validated_data['doctor_id']
         patient_id = serializer.validated_data['patient_id']
         specialist_id = serializer.validated_data['specialist_id']
@@ -266,7 +244,8 @@ class DoctorSpecialistDataViewSet(ModelViewSet):
         patient_name = f"{patient.first_name} {patient.last_name}"
 
         message_without_id = f"New Message From Doctor {doctor_name} for data sending for patient {patient_name}"
-        DoctorSpecialistNotification.objects.create(recipient=specialist, doctor_id=doctor_id, message=message_without_id)
+        message_with_id = f"{message_without_id} (ID: {doctorspecialistdata.id})"
+        DoctorSpecialistNotification.objects.create(recipient=specialist, doctor_id=doctor_id, message=message_with_id)
 
         sender_email = "fetamasr@gmail.com"
         recipient_email = specialist.email
@@ -339,7 +318,7 @@ class DoctorRadiologistNotificationViewSet(ModelViewSet):
         radiologist_id = self.request.query_params.get('radiologist_id')
         if radiologist_id:
             queryset = queryset.filter(recipient_id=radiologist_id)
-        return queryset
+        return queryset.order_by('-id')
 class RadiologistDoctorNotificationViewSet(ModelViewSet):
     queryset = RadiologistDoctorNotification.objects.all()
     serializer_class = RadiologistDoctorNotificationSerializer
@@ -348,7 +327,7 @@ class RadiologistDoctorNotificationViewSet(ModelViewSet):
         doctor_id = self.request.query_params.get('doctor_id')
         if doctor_id:
             queryset = queryset.filter(recipient_id=doctor_id)
-        return queryset
+        return queryset.order_by('-id')
     
 class DoctorSpecialistNotificationViewSet(ModelViewSet):
     queryset = DoctorSpecialistNotification.objects.all()
@@ -363,7 +342,7 @@ class DoctorSpecialistNotificationViewSet(ModelViewSet):
             queryset = queryset.filter(recipient_id=specialist_id)
         elif read_status:
             queryset = queryset.filter(read=read_status)
-        return queryset
+        return queryset.order_by('-id')
 class DoctorPatientMessageNotificationViewSet(ModelViewSet):
     queryset = DoctorPatientMessageNotification.objects.all()
     serializer_class = DoctorPatientMessageNotificationSerializer
@@ -377,21 +356,22 @@ class DoctorPatientMessageNotificationViewSet(ModelViewSet):
             queryset = queryset.filter(recipient_id=patient_id)
         elif read_status:
             queryset = queryset.filter(read=read_status)
-        return queryset
+        return queryset.order_by('-id')
 class SpecialistDoctorNotificationViewSet(ModelViewSet):
     queryset = SpecialistDoctorNotification.objects.all()
     serializer_class = SpecialistDoctorNotificationSerializer
+
     def get_queryset(self):
         queryset = super().get_queryset()
         doctor_id = self.request.query_params.get('doctor_id')
         if doctor_id:
             queryset = queryset.filter(recipient_id=doctor_id)
-        return queryset
+        return queryset.order_by('-id')  # Order notifications by ID in descending order
 
 
 
 class CustomerViewSet(CreateModelMixin,RetrieveModelMixin,UpdateModelMixin,GenericViewSet):
-    queryset=Customer.objects.all()
+    queryset=Customer.objects.select_related('user').all()
     serializer_class=CustomerSerializer
     @action(detail=False, methods=['GET'])
     def doctors(self, request):
@@ -444,7 +424,7 @@ class CustomerViewSet(CreateModelMixin,RetrieveModelMixin,UpdateModelMixin,Gener
 
 
 class PatientInfoViewSet(ModelViewSet):
-    queryset = Recomendation.objects.all()
+    queryset = Recomendation.objects.select_related('user','doctor').all()
     serializer_class = RecomendationSerializer
     @action(detail=False, methods=['GET', 'PUT'])
     def me(self, request):
@@ -509,7 +489,7 @@ class GetPatientBasedOnMedicalRecordViewSet(ModelViewSet):
 
 
 class DoctorSpecialistRequestViewSet(ModelViewSet):
-    queryset = DoctorSpecialistRequest.objects.all()
+    queryset = DoctorSpecialistRequest.objects.select_related('doctor','specialist').all()
     serializer_class = DoctorSpecialistRequestSerializer
     
     def create(self, request, *args, **kwargs):
@@ -550,9 +530,8 @@ class DoctorSpecialistRequestViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class DoctorPatientMessageViewSet(ModelViewSet):
-    queryset = DoctorPatientMessage.objects.all()
+    queryset = DoctorPatientMessage.objects.select_related('doctor','patient').all()
     serializer_class = DoctorPatientMessageSerializer
-    
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -591,7 +570,7 @@ class DoctorPatientMessageViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class SpecialistDoctorResponseViewSet(ModelViewSet):
-    queryset = SpecialistDoctorResponse.objects.all()
+    queryset = SpecialistDoctorResponse.objects.select_related('specialist','doctor').all()
     serializer_class = SpecialistDoctorResponseSerializer
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -632,7 +611,7 @@ class SpecialistDoctorResponseViewSet(ModelViewSet):
 
     
 class SpecialistDoctorRecommendationViewSet(ModelViewSet):
-    queryset = SpecialistDoctorRecommendation.objects.all()
+    queryset = SpecialistDoctorRecommendation.objects.select_related('specialist','doctor','patient')
     serializer_class=SpecialistDoctorRecommendationSerializer
 
     def create(self, request, *args, **kwargs):
@@ -671,6 +650,119 @@ class SpecialistDoctorRecommendationViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+# class SegmentedImagePredictionTotalViewSet(ModelViewSet):
+#     queryset = SegmentedImagePredictionTotal.objects.all()
+#     serializer_class = SegmentedImagePredictionTotalSerializer
+#     parser_classes = [MultiPartParser, FormParser]
+#     def create(self, request):
+#         serializer = SegmentedImagePredictionTotalSerializer(data=request.data)
+#         if serializer.is_valid():
+#             image = serializer.validated_data['image']
+#             fss = FileSystemStorage()
+#             filename = fss.save(image.name, image)
+#             file_url = fss.url(filename)
+#             file_path = os.path.join(settings.MEDIA_ROOT, filename)
+
+#             try:
+#                 # Load segmentation model
+#                 segmentation_model_path = os.path.join(os.getcwd(), 'model_best_checkpoint.h5')
+#                 with custom_object_scope({'bce_dice_loss': bce_dice_loss, 'iou_metric': iou_metric}):
+#                     segmentation_model = load_model(segmentation_model_path)
+
+#                 # Load classification model
+#                 classification_model_path = os.path.join(os.getcwd(), 'modelres50.h5')
+#                 classification_model = load_model(classification_model_path)
+
+#                 # Segmentation
+#                 input_image_seg = self.preprocess_image_segmentation(file_path)
+#                 output_image = segmentation_model.predict(input_image_seg)
+#                 output_path = os.path.join(settings.MEDIA_ROOT, 'segmentation_results', 'segmented_' + filename)
+#                 self.save_output_image(output_image, output_path)
+
+#                 # Classification
+#                 classification_result = self.model_predict(file_path, classification_model)
+#                 class_names = ['Glioma', 'Meningioma', 'Pituitary', 'No Tumour']
+#                 predicted_class = class_names[classification_result[0]]
+
+#                 # Save prediction to the database
+#                 segmented_image_prediction = SegmentedImagePredictionTotal(
+#                     image=image, segmentation_result=output_path, classification_result=predicted_class
+#                 )
+#                 segmented_image_prediction.save()
+
+#                 # Return the response
+#                 response_data = {
+#                     'id': segmented_image_prediction.id,
+#                     'segmentation_result_url': segmented_image_prediction.segmentation_result.url,
+#                     'classification_result': predicted_class,
+#                     'file_url': file_url
+#                 }
+#                 return Response(response_data, status=status.HTTP_200_OK)
+            
+#             except Exception as e:
+#                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     def preprocess_image_segmentation(self, image_path):
+#         image = Image.open(image_path)
+#         image = image.resize((128, 128))
+#         image = image.convert('L')
+#         input_image = np.array(image) / 255.0
+#         input_image = input_image.reshape(1, 128, 128, 1)
+#         return input_image
+
+#     def preprocess_image_classification(self, image_path):
+#         img = Image.open(image_path)
+#         img = img.resize((200, 200))
+#         img = img.convert('RGB')
+#         img = np.array(img) / 255.0
+#         img = np.expand_dims(img, axis=0)
+#         return img
+
+#     def model_predict(self, img_path, model):
+#         img = self.preprocess_image_classification(img_path)
+#         preds = model.predict(img)
+#         pred = np.argmax(preds, axis=1)
+#         return pred
+
+#     def save_output_image(self, output_image, output_path):
+#         output_image = np.squeeze(output_image)
+#         output_image = (output_image * 255).astype(np.uint8)
+#         if len(output_image.shape) == 2:
+#             output_image = Image.fromarray(output_image, mode='L')
+#         elif len(output_image.shape) == 3:
+#             if output_image.shape[2] == 1:
+#                 output_image = Image.fromarray(output_image[:, :, 0], mode='L')
+#             elif output_image.shape[2] == 3:
+#                 output_image = Image.fromarray(output_image, mode='RGB')
+#             else:
+#                 raise ValueError(f"Unexpected number of channels: {output_image.shape[2]}")
+#         else:
+#             raise ValueError(f"Unexpected array shape: {output_image.shape}")
+#         os.makedirs(os.path.dirname(output_path), exist_ok=True)
+#         output_image.save(output_path)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class SegmentedImagePredictionTotalViewSet(ModelViewSet):
     queryset = SegmentedImagePredictionTotal.objects.all()
     serializer_class = SegmentedImagePredictionTotalSerializer
@@ -699,7 +791,6 @@ class SegmentedImagePredictionTotalViewSet(ModelViewSet):
                 output_image = segmentation_model.predict(input_image_seg)
                 output_path = os.path.join(settings.MEDIA_ROOT, 'segmentation_results', 'segmented_' + filename)
                 self.save_output_image(output_image, output_path)
-
                 # Classification
                 classification_result = self.model_predict(file_path, classification_model)
                 class_names = ['Glioma', 'Meningioma', 'Pituitary', 'No Tumour']
@@ -724,20 +815,17 @@ class SegmentedImagePredictionTotalViewSet(ModelViewSet):
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
     def preprocess_image_segmentation(self, image_path):
-        image = Image.open(image_path)
-        image = image.resize((128, 128))
-        image = image.convert('L')
-        input_image = np.array(image) / 255.0
+        image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        image = cv2.resize(image, (128, 128))
+        input_image = image / 255.0
         input_image = input_image.reshape(1, 128, 128, 1)
         return input_image
 
     def preprocess_image_classification(self, image_path):
-        img = Image.open(image_path)
-        img = img.resize((200, 200))
-        img = img.convert('RGB')
-        img = np.array(img) / 255.0
+        img = cv2.imread(image_path, cv2.IMREAD_COLOR)
+        img = cv2.resize(img, (200, 200))
+        img = img / 255.0
         img = np.expand_dims(img, axis=0)
         return img
 
@@ -750,16 +838,15 @@ class SegmentedImagePredictionTotalViewSet(ModelViewSet):
     def save_output_image(self, output_image, output_path):
         output_image = np.squeeze(output_image)
         output_image = (output_image * 255).astype(np.uint8)
+        
         if len(output_image.shape) == 2:
-            output_image = Image.fromarray(output_image, mode='L')
+            cv2.imwrite(output_path, output_image)
         elif len(output_image.shape) == 3:
             if output_image.shape[2] == 1:
-                output_image = Image.fromarray(output_image[:, :, 0], mode='L')
+                cv2.imwrite(output_path, output_image[:, :, 0])
             elif output_image.shape[2] == 3:
-                output_image = Image.fromarray(output_image, mode='RGB')
+                cv2.imwrite(output_path, cv2.cvtColor(output_image, cv2.COLOR_RGB2BGR))
             else:
                 raise ValueError(f"Unexpected number of channels: {output_image.shape[2]}")
         else:
             raise ValueError(f"Unexpected array shape: {output_image.shape}")
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        output_image.save(output_path)

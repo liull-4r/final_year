@@ -30,17 +30,13 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Retrieve the logged in user from local storage
     const loggedInEmployee = getAuth();
-    // console.log(loggedInEmployee);
     loggedInEmployee.then((response) => {
-      console.log(response);
       if (response) {
         setIsLogged(true);
         // 3 is the employee_role for admin
       }
     });
   }, []);
-
-  console.log(isLogged);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
@@ -54,7 +50,6 @@ export const UserRoleProvider = ({ children }) => {
       // Check if token exists in local storage
       const token = localStorage.getItem("Token");
       if (!token) {
-        console.log("No token found. Setting role to default 'Patient'.");
         setUserRole("Patient");
         return;
       }
@@ -70,7 +65,6 @@ export const UserRoleProvider = ({ children }) => {
           }
         );
         const userData = await response.json();
-        console.log(userData);
         setUserRole(userData.role);
       } catch (error) {
         console.error("Error fetching user role:", error);
@@ -79,8 +73,6 @@ export const UserRoleProvider = ({ children }) => {
 
     fetchUserRole();
   }, []);
-
-  console.log(userRole);
 
   const userRoleValue = {
     userRole,

@@ -75,7 +75,7 @@ const SpecialistDataList = () => {
               />
               <div>
                 <p>
-                  {specialist.first_name} {specialist.last_name}
+                  Dr {specialist.first_name} {specialist.last_name}
                 </p>
                 <p>Phone: {specialist.phone}</p>
                 <p>City: {specialist.city}</p>

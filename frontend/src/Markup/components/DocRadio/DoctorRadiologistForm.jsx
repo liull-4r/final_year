@@ -71,7 +71,6 @@ const DoctorRadiologistForm = () => {
   return (
     <div style={{ marginTop: "100px" }} className="form-container">
       <form onSubmit={handleSubmit}>
-        
         <div className="form-group">
           <label htmlFor="notes">Notes:</label>
           <textarea
@@ -99,7 +98,15 @@ const DoctorRadiologistForm = () => {
             ))}
           </select>
         </div>
-        <button type="submit">Submit</button>
+        <button
+          type="submit"
+          style={{
+            backgroundColor: "#3368C6",
+            borderRadius: "20px",
+          }}
+        >
+          Submit
+        </button>
       </form>
     </div>
   );

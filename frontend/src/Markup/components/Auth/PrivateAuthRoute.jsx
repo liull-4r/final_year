@@ -39,7 +39,6 @@ const PrivateAuthRoute = ({ roles, children }) => {
   useEffect(() => {
     const loggedInEmployee = getAuth();
     loggedInEmployee.then((response) => {
-      console.log(response);
       if (response) {
         setIsLogged(true);
         if (roles && roles.length > 0 && roles.includes(userData.role)) {
@@ -50,9 +49,7 @@ const PrivateAuthRoute = ({ roles, children }) => {
     });
   }, [userData, roles]);
 
-  console.log("isChecked:", isChecked);
-  console.log("isLogged:", isLogged);
-  console.log("isAuthorized:", isAuthorized);
+
 
   if (isChecked) {
     if (!isLogged) {

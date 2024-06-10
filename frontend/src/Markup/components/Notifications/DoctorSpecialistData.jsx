@@ -63,7 +63,7 @@ const DoctorSpecialistData = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>Doctor Specialist Data</h2>
+      <h2 style={styles.heading}>Send Patient Data</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.inputGroup}>
           <label htmlFor="message" style={styles.label}>

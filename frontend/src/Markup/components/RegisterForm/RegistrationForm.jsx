@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
 import "../LoginForm/LoginForm.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 // import { toastFail, toastSuccess } from "../../../utils/app-toast";
 import axios from "axios";
@@ -76,7 +76,6 @@ const RegistrationForm = () => {
       city,
       gender,
       bio,
-      image,
       username,
       role,
     } = formData;

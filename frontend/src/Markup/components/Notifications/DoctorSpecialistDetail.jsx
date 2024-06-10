@@ -27,7 +27,8 @@ const DoctorSpecialistDetail = () => {
 
   return (
     <div style={{ marginTop: "100px", textAlign: "center" }}>
-      <h2>Information About Patient Detail</h2>
+      <h2>Medical Record</h2>
+
       <table
         style={{
           margin: "auto",
@@ -110,7 +111,7 @@ const DoctorSpecialistDetail = () => {
           </tr>
           <tr>
             <td style={{ border: "1px solid black", padding: "8px" }}>
-              Doctor Diagnosis:
+              Doctor Diagnosis & Treatment Plan:
             </td>
             <td style={{ border: "1px solid black", padding: "8px" }}>
               {appointment.doctor_notes}
@@ -154,6 +155,9 @@ const DoctorSpecialistDetail = () => {
           </tr>
         </tbody>
       </table>
+      <br />
+      <br />
+      <p>Note: {appointment.message}</p>
     </div>
   );
 };

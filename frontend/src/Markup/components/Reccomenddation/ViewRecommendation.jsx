@@ -41,7 +41,6 @@ const ViewRecommendation = () => {
   if (error) {
     return <div>{error}</div>;
   }
-  console.log(recommendations);
   return (
     <div style={{ textAlign: "center", marginTop: "100px" }}>
       <h1>Recommendations</h1>

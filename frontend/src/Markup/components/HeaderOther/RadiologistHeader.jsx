@@ -56,34 +56,6 @@ function RadiologistHeader() {
         <nav id="navbar" className={navbarClassName}>
           <ul className="header">
             <IoCloseSharp onClick={handleShow} className="mobile-nav-toggle" />
-
-            {/* <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/about"
-              >
-                About Us
-              </Link>
-            </li> */}
-            {/* <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/service"
-              >
-                Service
-              </Link>
-            </li> */}
-            <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/postradiotodoctor"
-              >
-                Upload to Doctor
-              </Link>
-            </li>
             <li className="link">
               <Link
                 onClick={handleLinkClick}
@@ -107,21 +79,22 @@ function RadiologistHeader() {
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/resources"
+                to="/postradiotodoctor"
               >
-                 Resources
+                Upload to Doctor
               </Link>
             </li>
 
-            {/* <li className="link">
+            <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/contact"
+                to="/resources"
               >
-                Contact
+                Resources
               </Link>
-            </li> */}
+            </li>
+
             {isLogged ? (
               <li>
                 <Link

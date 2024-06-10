@@ -18,7 +18,6 @@ function SearchForRecommendation() {
         const response = await axios.get(
           "http://localhost:9000/detection/customers/patients/"
         );
-        console.log(response);
         if (response.data) {
           setCustomers(response.data);
         }

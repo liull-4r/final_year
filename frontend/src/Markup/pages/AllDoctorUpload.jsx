@@ -27,10 +27,10 @@ function AllDoctorUpload() {
         </li>
       </button>
 
-      <button style={{ backgroundColor: "#3368c6", padding: "10px 25px" }}>
+      <button style={{ backgroundColor: "#3368c6", padding: "10px 38px" }}>
         <li style={{ listStyleType: "none" }} className="link">
           <Link className="nav-link scrollto" to="/posttospecialistdata">
-            Consult to Specialist
+            Consult Specialist
           </Link>
         </li>
       </button>

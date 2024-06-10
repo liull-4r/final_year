@@ -42,7 +42,6 @@ const MRIUploadForm = () => {
           },
         }
       );
-      console.log(response);
       if (response.status == 201) {
         toast.success("MRI scan uploaded successfully");
         // navigate("/dashboard");
@@ -50,7 +49,6 @@ const MRIUploadForm = () => {
         toast.dismiss(toastId);
       }
     } catch (error) {
-      console.log("Error uploading MRI scan:", error);
       toast.error("Failed to upload MRI scan");
       toast.dismiss(toastId);
     } finally {

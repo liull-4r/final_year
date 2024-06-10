@@ -1,4 +1,3 @@
-// import logoblack from "../../../assets/img/Custom/logoblack.png";
 import { IoCloseSharp } from "react-icons/io5";
 import { IoIosMenu } from "react-icons/io";
 import loginService from "../../../Services/login.service";
@@ -57,33 +56,16 @@ function SpecialistHeader() {
           <ul className="header">
             <IoCloseSharp onClick={handleShow} className="mobile-nav-toggle" />
 
-            {/* <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/about"
-              >
-                About Us
-              </Link>
-            </li> */}
             <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/appointement-list"
+                to="/doctorspecialistnotification"
               >
-                Appointement List
+                Notifications
               </Link>
             </li>
-            {/* <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
-                to="/service"
-              >
-                Service
-              </Link>
-            </li> */}
+
             <li className="link">
               <Link
                 onClick={handleLinkClick}
@@ -98,15 +80,6 @@ function SpecialistHeader() {
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/doctorspecialistnotification"
-              >
-                Notifications
-              </Link>
-            </li>
-            <li className="link">
-              <Link
-                onClick={handleLinkClick}
-                className="nav-link scrollto"
                 to="/scan"
               >
                 Scan
@@ -117,30 +90,30 @@ function SpecialistHeader() {
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/resources"
+                to="/appointment"
               >
-                Resources
+                Make Appointement
               </Link>
             </li>
             <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/appointment"
+                to="/appointement-list"
               >
-                Make Appointement
+                Appointement List
               </Link>
             </li>
-
-            {/* <li className="link">
+            <li className="link">
               <Link
                 onClick={handleLinkClick}
                 className="nav-link scrollto"
-                to="/contact"
+                to="/resources"
               >
-                Contact
+                Resources
               </Link>
-            </li> */}
+            </li>
+
             {isLogged ? (
               <li>
                 <Link
@@ -156,19 +129,7 @@ function SpecialistHeader() {
                 </Link>
               </li>
             ) : (
-              <li>
-                {/* <Link
-                  onClick={handleLinkClick}
-                  className="nav-link scrollto"
-                  to="/register"
-                >
-                  <button
-                    style={{ backgroundColor: "#3368c6", borderRadius: "15px" }}
-                  >
-                    Sign Up
-                  </button>
-                </Link> */}
-              </li>
+              <li></li>
             )}
             {isLogged ? (
               <li>
@@ -188,15 +149,7 @@ function SpecialistHeader() {
                 </Link>
               </li>
             ) : (
-              <li>
-                {/* <Link
-                  onClick={handleLinkClick}
-                  className="nav-link scrollto"
-                  to="/login"
-                >
-                  <button className="btn btn-primary">Login</button>
-                </Link> */}
-              </li>
+              <li></li>
             )}
           </ul>
           <IoIosMenu onClick={handleShow} className="mobile-nav-toggle" />

@@ -68,9 +68,9 @@ const SpecialistDoctorsList = () => {
                 className="doctor-image"
               />
               <div>
-                <h3>
-                  {doctor.first_name} {doctor.last_name}
-                </h3>
+                <h6>
+                  Dr {doctor.first_name} {doctor.last_name}
+                </h6>
                 <p>Phone: {doctor.phone}</p>
                 <p>City: {doctor.city}</p>
                 Bio:{renderBio(doctor.bio, doctor.id)}

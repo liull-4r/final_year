@@ -29,7 +29,7 @@ const DoctorRecommendationDetail = () => {
 
   return (
     <div style={{ marginTop: "100px", textAlign: "center" }}>
-      <h2>Specialist Recommendation Detail</h2>
+      <h2>Specialist Recommendation</h2>
       <p>{appointment.recommendation}</p>
     </div>
   );

@@ -100,7 +100,13 @@ const SpecialistRecommendation = () => {
             ))}
           </select>
         </div>
-        <button type="submit" style={styles.button}>
+        <button
+          type="submit"
+          // style={styles.button}
+          style={{
+            backgroundColor: "#3368C6",
+          }}
+        >
           Submit
         </button>
       </form>

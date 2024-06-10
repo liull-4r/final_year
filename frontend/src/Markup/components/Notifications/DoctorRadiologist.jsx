@@ -22,12 +22,17 @@ const DoctorRadiologistNotification = () => {
     fetchData();
   }, []);
 
-  const extractAppointmentId = (message) => {
+  // const extractAppointmentId = (message) => {
+  //   const match = message.match(/\(ID: (\d+)\)/);
+  //   return match ? match[1] : "";
+  // };
+
+  const extractMRIScanId = (message) => {
     const match = message.match(/\(ID: (\d+)\)/);
     return match ? match[1] : "";
   };
 
-  const extractMRIScanId = (message) => {
+  const extractId = (message) => {
     const match = message.match(/\(ID: (\d+)\)/);
     return match ? match[1] : "";
   };
@@ -56,6 +61,7 @@ const DoctorRadiologistNotification = () => {
       console.error("Error marking notification as read:", error);
     }
   };
+
   return (
     <div style={styles.container}>
       <h2 style={styles.heading}>Notifications {notifications.length}</h2>
@@ -67,7 +73,7 @@ const DoctorRadiologistNotification = () => {
             <div key={notification.id} style={styles.notification}>
               {notification.message.startsWith("New Message") ? (
                 <Link
-                  to={`/doctorradiologistdetail/${extractAppointmentId(
+                  to={`/doctorradiologistdetail/${extractId(
                     notification.message
                   )}`}
                 >

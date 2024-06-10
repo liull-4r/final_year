@@ -17,12 +17,12 @@ function AllDoctorMessage() {
           marginTop: "20px",
           marginBottom: "20px",
           backgroundColor: "#3368C6",
-          padding: "10px 75px",
+          padding: "10px 43px",
         }}
       >
         <li style={{ listStyleType: "none" }} className="link">
           <Link className="nav-link scrollto" to="/specialists">
-            Request
+            Send Request to Specialist
           </Link>
         </li>
       </button>
@@ -34,7 +34,7 @@ function AllDoctorMessage() {
       >
         <li style={{ listStyleType: "none" }} className="link">
           <Link className="nav-link scrollto" to="/searchformessage">
-            Send Message
+            Send Message to Patient
           </Link>
         </li>
       </button>
@@ -43,11 +43,12 @@ function AllDoctorMessage() {
           marginTop: "20px",
           marginBottom: "20px",
           backgroundColor: "#3368C6",
+          padding: "10px 15px",
         }}
       >
         <li style={{ listStyleType: "none" }} className="link">
           <Link className="nav-link scrollto" to="/searchforrecommendation">
-            Add Recommendation
+            Send Recommendation to Patient
           </Link>
         </li>
       </button>

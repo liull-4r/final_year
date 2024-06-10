@@ -23,7 +23,7 @@ const Scan = () => {
   };
 
   const handleUpload = async () => {
-    const toastId = toast.loading("Uploading MRI scan Image Please Wait...");
+    const toastId = toast.loading("Scanning MRI scan Image Please Wait...");
     if (file) {
       const formData = new FormData();
       formData.append("image", file);
@@ -42,7 +42,7 @@ const Scan = () => {
         setResult(response.data); // Set the result from the API response
         setFile(null);
         setError(null);
-        toast.success("Posted successfully");
+        toast.success("Analyzed successfully");
         toast.dismiss(toastId);
       } catch (error) {
         console.error("Error uploading file:", error);
@@ -60,7 +60,7 @@ const Scan = () => {
   return (
     <div style={{ textAlign: "center", marginTop: "100px" }}>
       <h2 style={{ marginBottom: "20px", color: "#333" }}>
-        Upload Your MRI Scan Image
+        Submit Your MRI Scan for Brain Tumor Classification & Segmentation
       </h2>
       <div
         style={{
@@ -112,7 +112,7 @@ const Scan = () => {
         }}
         onClick={handleUpload}
       >
-        Upload
+        Scan
       </button>
 
       {result && (

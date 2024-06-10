@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Activation = () => {
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   useEffect(() => {
     const activateAccount = async () => {
       setLoading(true);

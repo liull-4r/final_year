@@ -121,7 +121,7 @@ const MedicalRecordsForm = () => {
         </div>
       </div>
       <div className="mb-3">
-        <label>Doctor diagnosis:</label>
+        <label>Doctor diagnosis & Treatment Plan:</label>
         <textarea
           className="form-control"
           name="doctor_notes"
@@ -129,18 +129,7 @@ const MedicalRecordsForm = () => {
           onChange={handleChange}
         ></textarea>
       </div>
-      {/* <div className="row mb-3">
-        <div className="col-md-6">
-          <label>Patient:</label>
-          <input
-            type="text"
-            className="form-control"
-            name="patient"
-            value={formData.patient}
-            onChange={handleChange}
-          />
-        </div>
-      </div> */}
+
       <button type="submit" className="btn btn-primary custom-submit">
         Submit
       </button>

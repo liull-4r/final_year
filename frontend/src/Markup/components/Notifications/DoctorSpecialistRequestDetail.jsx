@@ -27,7 +27,7 @@ const DoctorSpecialistRequestDetail = () => {
 
   return (
     <div style={{ marginTop: "100px", textAlign: "center" }}>
-      <h2>Information About Doctor Request Detail</h2>
+      <h2>Doctor Request</h2>
       <p>{appointment.message}</p>
       {/* <table
         style={{

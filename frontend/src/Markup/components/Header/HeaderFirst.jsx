@@ -151,72 +151,22 @@ function HeaderFirst() {
                 Contact
               </Link>
             </li>
-            {isLogged ? (
-              <li>
-                <Link
-                  onClick={handleLinkClick}
-                  className="nav-link scrollto"
-                  to="/profile"
-                >
-                  <button
-                    style={{
-                      backgroundColor: "#3368C6",
-                      borderRadius: "20px",
-                    }}
-                  >
-                    Profile
-                  </button>
-                </Link>
-              </li>
-            ) : (
-              <li>
-                {/* <Link
-                  onClick={handleLinkClick}
-                  // className="nav-link scrollto"
-                  to="/register"
-                > */}
-                {/* <button className="btn btn-primary">Sign Up</button> */}
-                {/* </Link> */}
-              </li>
-            )}
-            {isLogged ? (
-              <li>
-                <Link
-                  onClick={() => {
-                    handleLinkClick();
-                    logOut();
+            <li>
+              <Link
+                onClick={handleLinkClick}
+                className="nav-link scrollto"
+                to="/login"
+              >
+                <button
+                  style={{
+                    backgroundColor: "#3368C6",
+                    borderRadius: "10px",
                   }}
-                  className="nav-link scrollto"
-                  to="/"
                 >
-                  <button
-                    style={{
-                      backgroundColor: "##3368C6",
-                      borderRadius: "20px",
-                    }}
-                  >
-                    Logout
-                  </button>
-                </Link>
-              </li>
-            ) : (
-              <li>
-                <Link
-                  onClick={handleLinkClick}
-                  className="nav-link scrollto"
-                  to="/login"
-                >
-                  <button
-                    style={{
-                      backgroundColor: "#3368C6",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    Login
-                  </button>
-                </Link>
-              </li>
-            )}
+                  Login
+                </button>
+              </Link>
+            </li>
           </ul>
           <IoIosMenu onClick={handleShow} className="mobile-nav-toggle" />
         </nav>

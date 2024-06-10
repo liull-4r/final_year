@@ -114,11 +114,7 @@ function ForgotForm() {
               value="Reset Your Password"
             />
           </form>
-          <span className="agreement">
-            <Link onClick={scrollToTop} to="/register">
-              Do not have an account?
-            </Link>
-          </span>
+         
         </div>
       </div>
     </>

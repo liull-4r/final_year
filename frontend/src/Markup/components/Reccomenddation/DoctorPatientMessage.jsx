@@ -60,7 +60,14 @@ const DoctorPatientMessage = () => {
             required
           />
         </div>
-        <button type="submit">Send Message</button>
+        <button
+          type="submit"
+          style={{
+            backgroundColor: "#3368C6",
+          }}
+        >
+          Send Message
+        </button>
       </form>
     </div>
   );

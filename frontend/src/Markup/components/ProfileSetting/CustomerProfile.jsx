@@ -77,7 +77,6 @@ function CustomerProfileSetting() {
     }
   };
 
-  console.log(customerData);
   return (
     <div className="containerone">
       <div style={{ marginBottom: "10rem" }}>

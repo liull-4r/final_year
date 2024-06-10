@@ -28,7 +28,7 @@
   width: 100%;
   opacity: 0.6;
   height: 100%;
-  background: #3368C6; 
+  background: #3368c6;
   /* Adjust the transparency and color here */
 }
 
@@ -58,6 +58,9 @@
   color: #aaa; /* Adjust color as needed */
   font-size: 1.25rem; /* Adjust size as needed */
 }
+.toggle-password-visibilityone:hover {
+  background-color: transparent;
+}
 
 .toggle-password-visibilityone:focus {
   outline: none;
@@ -79,7 +82,8 @@
 }
 
 .login-button:hover {
-  background-color: #0d4cb7; /* Darker blue on hover */
+  /* background-color: #0d4cb7; */
+  /* Darker blue on hover */
   transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
